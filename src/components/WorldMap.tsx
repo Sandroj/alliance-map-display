@@ -8,10 +8,12 @@ interface WorldMapProps {
   selectedAlliance: Alliance | null;
 }
 
+const DEFAULT_MAPBOX_TOKEN = 'pk.eyJ1Ijoic2FuZHJvajg4IiwiYSI6ImNsaXhhbHdpYzA2ZHMzY285bGVnMmM2M28ifQ._Tg-8q66Ef4MRPvac9zUjA';
+
 const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>('');
+  const [mapboxToken, setMapboxToken] = useState<string>(DEFAULT_MAPBOX_TOKEN);
 
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
@@ -32,13 +34,13 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
       
       // Add hover effect
       map.current.on('mousemove', 'country-fills', (e) => {
-        if (e.features && e.features[0]?.properties && map.current) {
+        if (e.features && e.features[0]?.properties) {
           const feature = e.features[0];
           const countryCode = feature.properties.iso_3166_1;
           const countryName = feature.properties.name;
           
-          const canvas = map.current.getCanvas();
-          if (canvas) {
+          if (map.current) {
+            const canvas = map.current.getCanvas();
             canvas.style.cursor = 'pointer';
           }
           // Show tooltip with country info
@@ -48,9 +50,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
       map.current.on('mouseleave', 'country-fills', () => {
         if (map.current) {
           const canvas = map.current.getCanvas();
-          if (canvas) {
-            canvas.style.cursor = '';
-          }
+          canvas.style.cursor = '';
         }
       });
     });
