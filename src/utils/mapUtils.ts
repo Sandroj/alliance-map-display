@@ -8,6 +8,7 @@ export const initializeMap = (container: HTMLDivElement, token: string) => {
     style: 'mapbox://styles/mapbox/light-v11',
     center: [0, 20],
     zoom: 1.5,
+    projection: 'mercator' // Changed to mercator projection for 2D view
   });
 };
 
