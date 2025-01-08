@@ -32,19 +32,25 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
       
       // Add hover effect
       map.current.on('mousemove', 'country-fills', (e) => {
-        if (e.features && e.features[0].properties) {
+        if (e.features && e.features[0]?.properties && map.current) {
           const feature = e.features[0];
           const countryCode = feature.properties.iso_3166_1;
           const countryName = feature.properties.name;
           
-          map.current?.getCanvas().style.cursor = 'pointer';
+          const canvas = map.current.getCanvas();
+          if (canvas) {
+            canvas.style.cursor = 'pointer';
+          }
           // Show tooltip with country info
         }
       });
 
       map.current.on('mouseleave', 'country-fills', () => {
         if (map.current) {
-          map.current.getCanvas().style.cursor = '';
+          const canvas = map.current.getCanvas();
+          if (canvas) {
+            canvas.style.cursor = '';
+          }
         }
       });
     });
