@@ -32,6 +32,23 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
     map.current.on('load', () => {
       if (!map.current) return;
       
+      // Add the countries layer
+      map.current.addSource('countries', {
+        type: 'vector',
+        url: 'mapbox://mapbox.country-boundaries-v1'
+      });
+
+      map.current.addLayer({
+        id: 'country-fills',
+        type: 'fill',
+        source: 'countries',
+        'source-layer': 'country_boundaries',
+        paint: {
+          'fill-color': 'rgba(0, 0, 0, 0.1)',
+          'fill-opacity': 0.7
+        }
+      });
+
       // Add hover effect
       map.current.on('mousemove', 'country-fills', (e) => {
         if (e.features && e.features[0]?.properties) {
@@ -53,6 +70,16 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
           canvas.style.cursor = '';
         }
       });
+
+      // Initial highlighting if there's a selected alliance
+      if (selectedAlliance) {
+        map.current.setPaintProperty('country-fills', 'fill-color', [
+          'case',
+          ['in', ['get', 'iso_3166_1'], ['literal', selectedAlliance.members]],
+          selectedAlliance.color,
+          'rgba(0, 0, 0, 0.1)'
+        ]);
+      }
     });
 
     return () => {
