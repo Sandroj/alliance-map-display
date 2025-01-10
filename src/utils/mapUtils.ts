@@ -31,7 +31,8 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
       paint: {
         'fill-color': 'rgba(200, 200, 200, 0.3)',
         'fill-opacity': 0.7
-      }
+      },
+      filter: ['==', ['get', 'disputed'], '0'] // Only show undisputed territories
     });
   }
 
@@ -41,7 +42,8 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
 };
 
 export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | null) => {
-  // Reset all countries
+  if (!map.getLayer('country-fills')) return;
+  
   map.setPaintProperty('country-fills', 'fill-color', [
     'case',
     ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance?.members || []]],
