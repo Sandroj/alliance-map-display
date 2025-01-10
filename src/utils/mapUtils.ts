@@ -8,26 +8,37 @@ export const initializeMap = (container: HTMLDivElement, token: string) => {
     style: 'mapbox://styles/mapbox/light-v11',
     center: [0, 20],
     zoom: 1.5,
-    projection: 'mercator' // Changed to mercator projection for 2D view
+    projection: 'mercator'
   });
 };
 
 export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Alliance | null) => {
-  map.addSource('countries', {
-    type: 'vector',
-    url: 'mapbox://mapbox.country-boundaries-v1'
-  });
+  // Add source if it doesn't exist
+  if (!map.getSource('countries')) {
+    map.addSource('countries', {
+      type: 'vector',
+      url: 'mapbox://mapbox.country-boundaries-v1'
+    });
+  }
 
-  map.addLayer({
-    id: 'country-fills',
-    type: 'fill',
-    source: 'countries',
-    'source-layer': 'country_boundaries',
-    paint: {
-      'fill-color': 'rgba(0, 0, 0, 0.1)',
-      'fill-opacity': 0.7
-    }
-  });
+  // Add layer if it doesn't exist
+  if (!map.getLayer('country-fills')) {
+    map.addLayer({
+      id: 'country-fills',
+      type: 'fill',
+      source: 'countries',
+      'source-layer': 'country_boundaries',
+      paint: {
+        'fill-color': [
+          'case',
+          ['boolean', ['feature-state', 'selected'], false],
+          ['string', ['feature-state', 'color'], 'rgba(0, 0, 0, 0.1)'],
+          'rgba(0, 0, 0, 0.1)'
+        ],
+        'fill-opacity': 0.7
+      }
+    });
+  }
 
   if (selectedAlliance) {
     updateAllianceHighlight(map, selectedAlliance);
@@ -35,15 +46,11 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
 };
 
 export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | null) => {
-  if (!alliance) {
-    map.setPaintProperty('country-fills', 'fill-color', 'rgba(0, 0, 0, 0.1)');
-    return;
-  }
-
+  // Reset all countries
   map.setPaintProperty('country-fills', 'fill-color', [
     'case',
-    ['in', ['get', 'iso_3166_1'], ['literal', alliance.members]],
-    alliance.color,
+    ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance?.members || []]],
+    alliance?.color || 'rgba(0, 0, 0, 0.1)',
     'rgba(0, 0, 0, 0.1)'
   ]);
 };
