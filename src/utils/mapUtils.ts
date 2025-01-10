@@ -29,12 +29,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
       source: 'countries',
       'source-layer': 'country_boundaries',
       paint: {
-        'fill-color': [
-          'case',
-          ['boolean', ['feature-state', 'selected'], false],
-          ['string', ['feature-state', 'color'], 'rgba(0, 0, 0, 0.1)'],
-          'rgba(0, 0, 0, 0.1)'
-        ],
+        'fill-color': 'rgba(200, 200, 200, 0.3)',
         'fill-opacity': 0.7
       }
     });
@@ -50,7 +45,7 @@ export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | 
   map.setPaintProperty('country-fills', 'fill-color', [
     'case',
     ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance?.members || []]],
-    alliance?.color || 'rgba(0, 0, 0, 0.1)',
-    'rgba(0, 0, 0, 0.1)'
+    alliance?.color || 'rgba(200, 200, 200, 0.3)',
+    'rgba(200, 200, 200, 0.3)'
   ]);
 };
