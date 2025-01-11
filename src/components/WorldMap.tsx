@@ -37,27 +37,11 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
         });
       });
 
-      map.current.on('load', () => {
-        if (!map.current) return;
-        setupCountriesLayer(map.current, selectedAlliance);
+      setupCountriesLayer(map.current, selectedAlliance);
 
-        // Add hover effect
-        map.current.on('mousemove', 'country-fills', (e) => {
-          if (e.features && e.features[0]?.properties) {
-            if (map.current) {
-              const canvas = map.current.getCanvas();
-              canvas.style.cursor = 'pointer';
-            }
-          }
-        });
-
-        map.current.on('mouseleave', 'country-fills', () => {
-          if (map.current) {
-            const canvas = map.current.getCanvas();
-            canvas.style.cursor = '';
-          }
-        });
-      });
+      return () => {
+        map.current?.remove();
+      };
     } catch (err) {
       console.error('Error initializing map:', err);
       setError('Failed to initialize the map. Please check your internet connection and try again.');
@@ -67,16 +51,23 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
         variant: "destructive",
       });
     }
-
-    return () => {
-      map.current?.remove();
-    };
   }, [mapboxToken]);
 
   // Update highlighting when alliance selection changes
   useEffect(() => {
-    if (!map.current || !map.current.isStyleLoaded()) return;
-    updateAllianceHighlight(map.current, selectedAlliance);
+    if (!map.current) return;
+    
+    const updateMap = () => {
+      if (map.current && map.current.isStyleLoaded()) {
+        console.log('Updating map with alliance:', selectedAlliance?.name);
+        updateAllianceHighlight(map.current, selectedAlliance);
+      } else {
+        console.log('Map not ready yet, retrying...');
+        setTimeout(updateMap, 100);
+      }
+    };
+
+    updateMap();
   }, [selectedAlliance]);
 
   return (
