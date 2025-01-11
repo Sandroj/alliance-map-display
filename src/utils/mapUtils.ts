@@ -13,7 +13,6 @@ export const initializeMap = (container: HTMLDivElement, token: string) => {
 };
 
 export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Alliance | null) => {
-  // Add source if it doesn't exist
   if (!map.getSource('countries')) {
     map.addSource('countries', {
       type: 'vector',
@@ -32,7 +31,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
         'fill-color': '#FFFFFF',  // Default white color for all countries
         'fill-opacity': 0.7
       }
-    });
+    }, 'country-label'); // Place below labels
   }
 
   // Add border layer for better visibility
@@ -46,7 +45,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
         'line-color': '#CCCCCC',
         'line-width': 0.5
       }
-    });
+    }, 'country-label'); // Place below labels
   }
 
   if (selectedAlliance) {
@@ -63,7 +62,6 @@ export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | 
   }
 
   if (alliance) {
-    // When an alliance is selected, highlight its members
     map.setPaintProperty('country-fills', 'fill-color', [
       'case',
       ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance.members]],
@@ -71,7 +69,6 @@ export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | 
       '#FFFFFF'  // Default white for non-member countries
     ]);
   } else {
-    // When no alliance is selected, all countries are white
     map.setPaintProperty('country-fills', 'fill-color', '#FFFFFF');
   }
 };
