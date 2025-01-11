@@ -32,10 +32,30 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
         'fill-color': [
           'case',
           ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', selectedAlliance?.members || []]],
-          selectedAlliance?.color || 'rgba(200, 200, 200, 0.3)',
-          'rgba(200, 200, 200, 0.3)'
+          selectedAlliance?.color || '#cccccc',
+          '#cccccc'
         ],
-        'fill-opacity': 0.7
+        'fill-opacity': [
+          'case',
+          ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', selectedAlliance?.members || []]],
+          0.8,
+          0.3
+        ]
+      },
+      filter: ['==', ['get', 'disputed'], '0']
+    });
+  }
+
+  // Add outline layer for better visibility
+  if (!map.getLayer('country-borders')) {
+    map.addLayer({
+      id: 'country-borders',
+      type: 'line',
+      source: 'countries',
+      'source-layer': 'country_boundaries',
+      paint: {
+        'line-color': '#ffffff',
+        'line-width': 1
       },
       filter: ['==', ['get', 'disputed'], '0']
     });
@@ -49,12 +69,19 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
 export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | null) => {
   if (!map.getLayer('country-fills')) return;
 
-  const defaultColor = 'rgba(200, 200, 200, 0.3)';
+  const defaultColor = '#cccccc';
   
   map.setPaintProperty('country-fills', 'fill-color', [
     'case',
     ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance?.members || []]],
     alliance?.color || defaultColor,
     defaultColor
+  ]);
+
+  map.setPaintProperty('country-fills', 'fill-opacity', [
+    'case',
+    ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance?.members || []]],
+    0.8,
+    0.3
   ]);
 };
