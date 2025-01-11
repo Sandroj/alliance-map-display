@@ -21,7 +21,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     });
   }
 
-  // Add layer if it doesn't exist
+  // Add fill layer if it doesn't exist
   if (!map.getLayer('country-fills')) {
     map.addLayer({
       id: 'country-fills',
@@ -29,13 +29,22 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
       source: 'countries',
       'source-layer': 'country_boundaries',
       paint: {
-        'fill-color': [
-          'case',
-          ['boolean', ['feature-state', 'selected'], false],
-          ['string', ['feature-state', 'color'], 'rgba(0, 0, 0, 0.1)'],
-          'rgba(0, 0, 0, 0.1)'
-        ],
+        'fill-color': '#FFFFFF',  // Default white color for all countries
         'fill-opacity': 0.7
+      }
+    });
+  }
+
+  // Add border layer for better visibility
+  if (!map.getLayer('country-borders')) {
+    map.addLayer({
+      id: 'country-borders',
+      type: 'line',
+      source: 'countries',
+      'source-layer': 'country_boundaries',
+      paint: {
+        'line-color': '#CCCCCC',
+        'line-width': 0.5
       }
     });
   }
@@ -46,11 +55,23 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
 };
 
 export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | null) => {
-  // Reset all countries
-  map.setPaintProperty('country-fills', 'fill-color', [
-    'case',
-    ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance?.members || []]],
-    alliance?.color || 'rgba(0, 0, 0, 0.1)',
-    'rgba(0, 0, 0, 0.1)'
-  ]);
+  console.log('Updating alliance highlight:', alliance?.name, 'with members:', alliance?.members);
+  
+  if (!map.getLayer('country-fills')) {
+    console.error('country-fills layer not found');
+    return;
+  }
+
+  if (alliance) {
+    // When an alliance is selected, highlight its members
+    map.setPaintProperty('country-fills', 'fill-color', [
+      'case',
+      ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance.members]],
+      alliance.color,
+      '#FFFFFF'  // Default white for non-member countries
+    ]);
+  } else {
+    // When no alliance is selected, all countries are white
+    map.setPaintProperty('country-fills', 'fill-color', '#FFFFFF');
+  }
 };
