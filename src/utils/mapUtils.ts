@@ -13,6 +13,7 @@ export const initializeMap = (container: HTMLDivElement, token: string) => {
 };
 
 export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Alliance | null) => {
+  // Add the countries source if it doesn't exist
   if (!map.getSource('countries')) {
     map.addSource('countries', {
       type: 'vector',
@@ -20,40 +21,43 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     });
   }
 
-  if (!map.getLayer('country-fills')) {
-    map.addLayer({
-      id: 'country-fills',
-      type: 'fill',
-      source: 'countries',
-      'source-layer': 'country_boundaries',
-      paint: {
-        'fill-color': '#FFFFFF',
-        'fill-opacity': ['case',
-          ['==', ['get', 'disputed'], 'true'], 0.3,
-          0.7
-        ]
-      }
-    });
-  }
+  // Remove existing layers if they exist
+  if (map.getLayer('country-fills')) map.removeLayer('country-fills');
+  if (map.getLayer('country-borders')) map.removeLayer('country-borders');
 
-  if (!map.getLayer('country-borders')) {
-    map.addLayer({
-      id: 'country-borders',
-      type: 'line',
-      source: 'countries',
-      'source-layer': 'country_boundaries',
-      paint: {
-        'line-color': '#CCCCCC',
-        'line-width': 0.5
-      }
-    });
-  }
+  // Add fill layer
+  map.addLayer({
+    id: 'country-fills',
+    type: 'fill',
+    source: 'countries',
+    'source-layer': 'country_boundaries',
+    paint: {
+      'fill-color': '#FFFFFF',
+      'fill-opacity': 0.7
+    }
+  });
 
-  // Ensure labels are on top
-  const labelLayerId = map.getStyle().layers.find(layer => layer.type === 'symbol' && layer.layout && layer.layout['text-field'])?.id;
-  if (labelLayerId) {
-    map.moveLayer(labelLayerId);
-  }
+  // Add border layer
+  map.addLayer({
+    id: 'country-borders',
+    type: 'line',
+    source: 'countries',
+    'source-layer': 'country_boundaries',
+    paint: {
+      'line-color': '#CCCCCC',
+      'line-width': 0.5
+    }
+  });
+
+  // Move all symbol layers to the top
+  const layers = map.getStyle().layers;
+  const labelLayerIds = layers
+    .filter(layer => layer.type === 'symbol')
+    .map(layer => layer.id);
+
+  labelLayerIds.forEach(layerId => {
+    map.moveLayer(layerId);
+  });
 
   if (selectedAlliance) {
     updateAllianceHighlight(map, selectedAlliance);
@@ -70,8 +74,10 @@ export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | 
       alliance.color,
       '#FFFFFF'
     ]);
+    map.setPaintProperty('country-fills', 'fill-opacity', 0.7);
   } else {
     map.setPaintProperty('country-fills', 'fill-color', '#FFFFFF');
+    map.setPaintProperty('country-fills', 'fill-opacity', 0.7);
   }
 };
 
