@@ -20,7 +20,6 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     });
   }
 
-  // Add fill layer if it doesn't exist
   if (!map.getLayer('country-fills')) {
     map.addLayer({
       id: 'country-fills',
@@ -28,13 +27,15 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
       source: 'countries',
       'source-layer': 'country_boundaries',
       paint: {
-        'fill-color': '#FFFFFF',  // Default white color for all countries
-        'fill-opacity': 0.7
+        'fill-color': '#FFFFFF',
+        'fill-opacity': ['case',
+          ['==', ['get', 'disputed'], 'true'], 0.3,
+          0.7
+        ]
       }
-    }, 'country-label'); // Place below labels
+    });
   }
 
-  // Add border layer for better visibility
   if (!map.getLayer('country-borders')) {
     map.addLayer({
       id: 'country-borders',
@@ -45,7 +46,13 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
         'line-color': '#CCCCCC',
         'line-width': 0.5
       }
-    }, 'country-label'); // Place below labels
+    });
+  }
+
+  // Ensure labels are on top
+  const labelLayerId = map.getStyle().layers.find(layer => layer.type === 'symbol' && layer.layout && layer.layout['text-field'])?.id;
+  if (labelLayerId) {
+    map.moveLayer(labelLayerId);
   }
 
   if (selectedAlliance) {
@@ -54,21 +61,20 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
 };
 
 export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | null) => {
-  console.log('Updating alliance highlight:', alliance?.name, 'with members:', alliance?.members);
-  
-  if (!map.getLayer('country-fills')) {
-    console.error('country-fills layer not found');
-    return;
-  }
+  if (!map.getLayer('country-fills')) return;
 
   if (alliance) {
     map.setPaintProperty('country-fills', 'fill-color', [
       'case',
       ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', alliance.members]],
       alliance.color,
-      '#FFFFFF'  // Default white for non-member countries
+      '#FFFFFF'
     ]);
   } else {
     map.setPaintProperty('country-fills', 'fill-color', '#FFFFFF');
   }
+};
+
+export const findCountryAlliances = (countryCode: string, alliances: Alliance[]): Alliance[] => {
+  return alliances.filter(alliance => alliance.members.includes(countryCode));
 };
