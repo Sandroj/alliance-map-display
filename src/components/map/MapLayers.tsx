@@ -19,52 +19,46 @@ const MapLayers: React.FC<MapLayersProps> = ({
   useEffect(() => {
     if (!map || !popup) return;
 
-    const handleCountryHover = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
-      if (e.features && e.features[0]?.properties) {
-        const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
-        const countryName = e.features[0].properties.name_en;
-        
-        const canvas = map.getCanvas();
-        canvas.style.cursor = 'pointer';
+    let mounted = true;
+    const eventHandlers: { [key: string]: (e: mapboxgl.MapMouseEvent) => void } = {};
 
-        if (showAlliances) {
+    const addEventListeners = () => {
+      if (!mounted || !map.getLayer('country-fills')) return;
+
+      eventHandlers.countryHover = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
+        if (e.features && e.features[0]?.properties && showAlliances) {
+          const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
+          const countryName = e.features[0].properties.name_en;
+          
+          map.getCanvas().style.cursor = 'pointer';
           popup
             .setLngLat(e.lngLat)
             .setHTML(createCountryPopup(countryName, countryCode, alliances))
             .addTo(map);
         }
-      }
-    };
+      };
 
-    const handleDisputedHover = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
-      if (e.features && e.features[0] && showDisputed) {
-        popup
-          .setLngLat(e.lngLat)
-          .setHTML(createDisputePopup(e.features[0].properties))
-          .addTo(map);
-      }
-    };
+      eventHandlers.disputedHover = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
+        if (e.features && e.features[0] && showDisputed) {
+          popup
+            .setLngLat(e.lngLat)
+            .setHTML(createDisputePopup(e.features[0].properties))
+            .addTo(map);
+        }
+      };
 
-    const handleMouseLeave = () => {
-      const canvas = map.getCanvas();
-      canvas.style.cursor = '';
-      popup.remove();
-    };
+      eventHandlers.mouseLeave = () => {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+      };
 
-    let layersAdded = false;
+      map.on('mousemove', 'country-fills', eventHandlers.countryHover);
+      map.on('mouseleave', 'country-fills', eventHandlers.mouseLeave);
 
-    const addEventListeners = () => {
-      if (!map.getLayer('country-fills')) return;
-      
-      map.on('mousemove', 'country-fills', handleCountryHover);
-      map.on('mouseleave', 'country-fills', handleMouseLeave);
-      
       if (map.getLayer('disputed-territories')) {
-        map.on('mousemove', 'disputed-territories', handleDisputedHover);
-        map.on('mouseleave', 'disputed-territories', handleMouseLeave);
+        map.on('mousemove', 'disputed-territories', eventHandlers.disputedHover);
+        map.on('mouseleave', 'disputed-territories', eventHandlers.mouseLeave);
       }
-      
-      layersAdded = true;
     };
 
     if (map.isStyleLoaded()) {
@@ -74,21 +68,20 @@ const MapLayers: React.FC<MapLayersProps> = ({
     }
 
     return () => {
-      if (!layersAdded || !map) return;
-      
-      try {
+      mounted = false;
+      if (!map) return;
+
+      // Remove event listeners if they were added
+      Object.entries(eventHandlers).forEach(([, handler]) => {
         if (map.getLayer('country-fills')) {
-          map.off('mousemove', 'country-fills', handleCountryHover);
-          map.off('mouseleave', 'country-fills', handleMouseLeave);
+          map.off('mousemove', 'country-fills', handler);
+          map.off('mouseleave', 'country-fills', handler);
         }
-        
         if (map.getLayer('disputed-territories')) {
-          map.off('mousemove', 'disputed-territories', handleDisputedHover);
-          map.off('mouseleave', 'disputed-territories', handleMouseLeave);
+          map.off('mousemove', 'disputed-territories', handler);
+          map.off('mouseleave', 'disputed-territories', handler);
         }
-      } catch (error) {
-        console.warn('Error during cleanup:', error);
-      }
+      });
     };
   }, [map, popup, showAlliances, showDisputed]);
 

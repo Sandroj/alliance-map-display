@@ -19,17 +19,18 @@ const MapInitializer: React.FC<MapInitializerProps> = ({
 }) => {
   const mapInstance = useRef<mapboxgl.Map | null>(null);
   const { toast } = useToast();
+  const initializationAttempted = useRef(false);
 
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken) return;
+    if (!mapContainer.current || !mapboxToken || initializationAttempted.current) return;
 
-    let isMounted = true;
+    let mounted = true;
+    initializationAttempted.current = true;
 
     const initializeMap = async () => {
       try {
         if (mapInstance.current) {
           mapInstance.current.remove();
-          mapInstance.current = null;
         }
 
         mapboxgl.accessToken = mapboxToken;
@@ -42,34 +43,38 @@ const MapInitializer: React.FC<MapInitializerProps> = ({
           projection: 'mercator'
         });
 
-        await new Promise<void>((resolve) => {
+        await new Promise<void>((resolve, reject) => {
           map.once('style.load', () => resolve());
+          map.once('error', (e) => reject(e.error));
         });
 
-        if (!isMounted) {
+        if (!mounted) {
           map.remove();
           return;
         }
 
         map.addControl(new mapboxgl.NavigationControl(), 'top-right');
         setupCountriesLayer(map, selectedAlliance);
+        
         mapInstance.current = map;
         onMapInit(map);
 
       } catch (err) {
         console.error('Error initializing map:', err);
-        toast({
-          title: "Map Initialization Error",
-          description: "Failed to initialize the map. Please check your internet connection and try again.",
-          variant: "destructive",
-        });
+        if (mounted) {
+          toast({
+            title: "Map Initialization Error",
+            description: "Failed to initialize the map. Please check your internet connection and try again.",
+            variant: "destructive",
+          });
+        }
       }
     };
 
     initializeMap();
 
     return () => {
-      isMounted = false;
+      mounted = false;
       if (mapInstance.current) {
         mapInstance.current.remove();
         mapInstance.current = null;
