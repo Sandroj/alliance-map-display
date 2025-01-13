@@ -20,7 +20,7 @@ export const createCountryPopup = (countryName: string, countryCode: string, all
   return `
     <div class="font-semibold">${countryName}</div>
     <div class="text-sm text-gray-600">Member of:</div>
-    <div class="text-sm">${alliancesList}</div>
+    <div class="text-sm">${alliancesList || 'No major alliances'}</div>
   `;
 };
 

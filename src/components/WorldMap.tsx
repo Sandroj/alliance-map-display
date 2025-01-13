@@ -7,6 +7,7 @@ import { initializeMap, setupCountriesLayer, updateAllianceHighlight } from '@/u
 import { Alert, AlertDescription } from './ui/alert';
 import { useToast } from './ui/use-toast';
 import MapControls from './MapControls';
+import AllianceButtons from './AllianceButtons';
 import { createCountryPopup, createDisputePopup } from './MapPopup';
 import { alliances } from '@/data/alliances';
 
@@ -33,28 +34,28 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
       map.current = initializeMap(mapContainer.current, mapboxToken);
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-      map.current.on('error', (e) => {
-        console.error('Mapbox error:', e);
-        setError('There was an error loading the map. Please try refreshing the page.');
-        toast({
-          title: "Map Error",
-          description: "There was an error loading the map. Please try refreshing the page.",
-          variant: "destructive",
-        });
-      });
-
       map.current.on('load', () => {
         if (!map.current) return;
         setupCountriesLayer(map.current, selectedAlliance);
 
+        // Add disputed territories layers
         if (showDisputed) {
-          map.current.setLayoutProperty('admin-1-boundary-disputed', 'visibility', 'visible');
-          map.current.setLayoutProperty('admin-0-boundary-disputed', 'visibility', 'visible');
-          map.current.setPaintProperty('admin-0-boundary-disputed', 'line-color', '#FF0000');
-          map.current.setPaintProperty('admin-0-boundary-disputed', 'line-width', 2);
-          map.current.setPaintProperty('admin-0-boundary-disputed', 'line-dasharray', [2, 2]);
+          // Add disputed territories style
+          map.current.setPaintProperty('disputed_territory', 'fill-color', '#FF0000');
+          map.current.setPaintProperty('disputed_territory', 'fill-opacity', 0.3);
+          map.current.setLayoutProperty('disputed_territory', 'visibility', 'visible');
+          
+          // Add disputed boundaries style
+          map.current.setPaintProperty('disputed_border', 'line-color', '#FF0000');
+          map.current.setPaintProperty('disputed_border', 'line-width', 2);
+          map.current.setPaintProperty('disputed_border', 'line-dasharray', [2, 2]);
+          map.current.setLayoutProperty('disputed_border', 'visibility', 'visible');
+        } else {
+          map.current.setLayoutProperty('disputed_territory', 'visibility', 'none');
+          map.current.setLayoutProperty('disputed_border', 'visibility', 'none');
         }
 
+        // Handle country hover events
         map.current.on('mousemove', 'country-fills', (e) => {
           if (e.features && e.features[0]?.properties) {
             const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
@@ -81,8 +82,9 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
           }
         });
 
+        // Handle disputed territory hover events
         if (showDisputed) {
-          map.current.on('mousemove', 'admin-0-boundary-disputed', (e) => {
+          map.current.on('mousemove', 'disputed_territory', (e) => {
             if (e.features && e.features[0]) {
               if (!popup.current) {
                 popup.current = new mapboxgl.Popup({
@@ -99,6 +101,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
           });
         }
 
+        // Handle mouse leave events
         map.current.on('mouseleave', 'country-fills', () => {
           if (map.current) {
             const canvas = map.current.getCanvas();
@@ -110,13 +113,24 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
         });
 
         if (showDisputed) {
-          map.current.on('mouseleave', 'admin-0-boundary-disputed', () => {
+          map.current.on('mouseleave', 'disputed_territory', () => {
             if (popup.current) {
               popup.current.remove();
             }
           });
         }
       });
+
+      map.current.on('error', (e) => {
+        console.error('Mapbox error:', e);
+        setError('There was an error loading the map. Please try refreshing the page.');
+        toast({
+          title: "Map Error",
+          description: "There was an error loading the map. Please try refreshing the page.",
+          variant: "destructive",
+        });
+      });
+
     } catch (err) {
       console.error('Error initializing map:', err);
       setError('Failed to initialize the map. Please check your internet connection and try again.');
@@ -139,6 +153,16 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
 
   return (
     <div className="space-y-4">
+      <AllianceButtons
+        alliances={alliances}
+        selectedAlliance={selectedAlliance}
+        onSelect={(alliance) => {
+          if (map.current) {
+            updateAllianceHighlight(map.current, alliance);
+          }
+        }}
+      />
+      
       <MapControls
         showAlliances={showAlliances}
         setShowAlliances={setShowAlliances}
