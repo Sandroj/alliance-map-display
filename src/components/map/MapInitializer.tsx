@@ -17,37 +17,40 @@ const MapInitializer: React.FC<MapInitializerProps> = ({
   onMapInit,
   selectedAlliance
 }) => {
-  const map = useRef<mapboxgl.Map | null>(null);
+  const mapInstance = useRef<mapboxgl.Map | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
 
     try {
-      if (map.current) return;
+      if (mapInstance.current) {
+        mapInstance.current.remove();
+      }
 
-      map.current = new mapboxgl.Map({
+      mapboxgl.accessToken = mapboxToken;
+      
+      const map = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v12',
         center: [0, 20],
         zoom: 1.5,
-        projection: 'mercator',
-        accessToken: mapboxToken
+        projection: 'mercator'
       });
 
-      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-      map.current.once('style.load', () => {
-        if (map.current) {
-          setupCountriesLayer(map.current, selectedAlliance);
-          onMapInit(map.current);
-        }
+      map.on('style.load', () => {
+        setupCountriesLayer(map, selectedAlliance);
+        onMapInit(map);
       });
+
+      mapInstance.current = map;
 
       return () => {
-        if (map.current) {
-          map.current.remove();
-          map.current = null;
+        if (mapInstance.current) {
+          mapInstance.current.remove();
+          mapInstance.current = null;
         }
       };
     } catch (err) {

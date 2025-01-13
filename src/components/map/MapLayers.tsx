@@ -17,7 +17,7 @@ const MapLayers: React.FC<MapLayersProps> = ({
   showDisputed
 }) => {
   useEffect(() => {
-    if (!map || !map.isStyleLoaded()) return;
+    if (!map || !popup) return;
 
     const handleCountryHover = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
       if (e.features && e.features[0]?.properties) {
@@ -27,7 +27,7 @@ const MapLayers: React.FC<MapLayersProps> = ({
         const canvas = map.getCanvas();
         canvas.style.cursor = 'pointer';
 
-        if (showAlliances && popup) {
+        if (showAlliances) {
           popup
             .setLngLat(e.lngLat)
             .setHTML(createCountryPopup(countryName, countryCode, alliances))
@@ -37,7 +37,7 @@ const MapLayers: React.FC<MapLayersProps> = ({
     };
 
     const handleDisputedHover = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
-      if (e.features && e.features[0] && popup) {
+      if (e.features && e.features[0] && showDisputed) {
         popup
           .setLngLat(e.lngLat)
           .setHTML(createDisputePopup(e.features[0].properties))
@@ -48,21 +48,33 @@ const MapLayers: React.FC<MapLayersProps> = ({
     const handleMouseLeave = () => {
       const canvas = map.getCanvas();
       canvas.style.cursor = '';
-      if (popup) {
-        popup.remove();
-      }
+      popup.remove();
     };
 
-    map.on('mousemove', 'country-fills', handleCountryHover);
-    map.on('mousemove', 'disputed-territories', handleDisputedHover);
-    map.on('mouseleave', 'country-fills', handleMouseLeave);
-    map.on('mouseleave', 'disputed-territories', handleMouseLeave);
+    // Wait for style to be loaded before adding event listeners
+    if (map.isStyleLoaded()) {
+      map.on('mousemove', 'country-fills', handleCountryHover);
+      map.on('mousemove', 'disputed-territories', handleDisputedHover);
+      map.on('mouseleave', 'country-fills', handleMouseLeave);
+      map.on('mouseleave', 'disputed-territories', handleMouseLeave);
+    } else {
+      map.once('style.load', () => {
+        map.on('mousemove', 'country-fills', handleCountryHover);
+        map.on('mousemove', 'disputed-territories', handleDisputedHover);
+        map.on('mouseleave', 'country-fills', handleMouseLeave);
+        map.on('mouseleave', 'disputed-territories', handleMouseLeave);
+      });
+    }
 
     return () => {
-      map.off('mousemove', 'country-fills', handleCountryHover);
-      map.off('mousemove', 'disputed-territories', handleDisputedHover);
-      map.off('mouseleave', 'country-fills', handleMouseLeave);
-      map.off('mouseleave', 'disputed-territories', handleMouseLeave);
+      if (map.getLayer('country-fills')) {
+        map.off('mousemove', 'country-fills', handleCountryHover);
+        map.off('mouseleave', 'country-fills', handleMouseLeave);
+      }
+      if (map.getLayer('disputed-territories')) {
+        map.off('mousemove', 'disputed-territories', handleDisputedHover);
+        map.off('mouseleave', 'disputed-territories', handleMouseLeave);
+      }
     };
   }, [map, popup, showAlliances, showDisputed]);
 
