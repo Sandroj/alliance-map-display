@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Alliance } from '@/data/alliances';
 import MapTokenInput from './MapTokenInput';
-import { initializeMap, setupCountriesLayer, updateAllianceHighlight } from '@/utils/mapUtils';
+import { setupCountriesLayer, updateAllianceHighlight } from '@/utils/mapUtils';
 import { Alert, AlertDescription } from './ui/alert';
 import { useToast } from './ui/use-toast';
 import MapControls from './MapControls';
@@ -26,13 +26,16 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
   const [showDisputed, setShowDisputed] = useState(false);
   const { toast } = useToast();
 
+  // Initialize map
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
 
     try {
+      if (map.current) return; // Prevent multiple initializations
+
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12', // Changed to streets-v12 which includes disputed territories
+        style: 'mapbox://styles/mapbox/streets-v12',
         center: [0, 20],
         zoom: 1.5,
         projection: 'mercator',
@@ -41,11 +44,38 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
 
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-      map.current.on('load', () => {
-        if (!map.current) return;
+      // Return cleanup function
+      return () => {
+        if (popup.current) {
+          popup.current.remove();
+          popup.current = null;
+        }
+        if (map.current) {
+          map.current.remove();
+          map.current = null;
+        }
+      };
+    } catch (err) {
+      console.error('Error initializing map:', err);
+      setError('Failed to initialize the map. Please check your internet connection and try again.');
+      toast({
+        title: "Map Initialization Error",
+        description: "Failed to initialize the map. Please check your internet connection and try again.",
+        variant: "destructive",
+      });
+    }
+  }, [mapboxToken]);
 
-        // Add disputed territories layer
-        map.current.addLayer({
+  // Setup layers and event handlers
+  useEffect(() => {
+    if (!map.current || !map.current.isStyleLoaded()) return;
+
+    const currentMap = map.current;
+
+    const setupLayers = () => {
+      // Add disputed territories layer
+      if (!currentMap.getLayer('disputed-territories')) {
+        currentMap.addLayer({
           id: 'disputed-territories',
           type: 'fill',
           source: {
@@ -61,7 +91,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
         });
 
         // Add disputed boundaries layer
-        map.current.addLayer({
+        currentMap.addLayer({
           id: 'disputed-boundaries',
           type: 'line',
           source: {
@@ -76,100 +106,91 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
             'line-dasharray': [2, 2]
           }
         });
+      }
 
-        setupCountriesLayer(map.current, selectedAlliance);
+      setupCountriesLayer(currentMap, selectedAlliance);
+    };
 
-        // Handle country hover events
-        map.current.on('mousemove', 'country-fills', (e) => {
-          if (e.features && e.features[0]?.properties) {
-            const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
-            const countryName = e.features[0].properties.name_en;
-            
-            if (map.current) {
-              const canvas = map.current.getCanvas();
-              canvas.style.cursor = 'pointer';
+    const handleCountryHover = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
+      if (e.features && e.features[0]?.properties) {
+        const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
+        const countryName = e.features[0].properties.name_en;
+        
+        const canvas = currentMap.getCanvas();
+        canvas.style.cursor = 'pointer';
 
-              if (showAlliances) {
-                if (!popup.current) {
-                  popup.current = new mapboxgl.Popup({
-                    closeButton: false,
-                    className: 'bg-white rounded-md shadow-lg p-2'
-                  });
-                }
-
-                popup.current
-                  .setLngLat(e.lngLat)
-                  .setHTML(createCountryPopup(countryName, countryCode, alliances))
-                  .addTo(map.current);
-              }
-            }
+        if (showAlliances) {
+          if (!popup.current) {
+            popup.current = new mapboxgl.Popup({
+              closeButton: false,
+              className: 'bg-white rounded-md shadow-lg p-2'
+            });
           }
-        });
 
-        // Handle disputed territory hover events
-        map.current.on('mousemove', 'disputed-territories', (e) => {
-          if (e.features && e.features[0]) {
-            if (!popup.current) {
-              popup.current = new mapboxgl.Popup({
-                closeButton: false,
-                className: 'bg-white rounded-md shadow-lg p-2'
-              });
-            }
+          popup.current
+            .setLngLat(e.lngLat)
+            .setHTML(createCountryPopup(countryName, countryCode, alliances))
+            .addTo(currentMap);
+        }
+      }
+    };
 
-            popup.current
-              .setLngLat(e.lngLat)
-              .setHTML(createDisputePopup(e.features[0].properties))
-              .addTo(map.current);
-          }
-        });
+    const handleDisputedHover = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
+      if (e.features && e.features[0]) {
+        if (!popup.current) {
+          popup.current = new mapboxgl.Popup({
+            closeButton: false,
+            className: 'bg-white rounded-md shadow-lg p-2'
+          });
+        }
 
-        // Handle mouse leave events
-        map.current.on('mouseleave', 'country-fills', () => {
-          if (map.current) {
-            const canvas = map.current.getCanvas();
-            canvas.style.cursor = '';
-            if (popup.current) {
-              popup.current.remove();
-            }
-          }
-        });
+        popup.current
+          .setLngLat(e.lngLat)
+          .setHTML(createDisputePopup(e.features[0].properties))
+          .addTo(currentMap);
+      }
+    };
 
-        map.current.on('mouseleave', 'disputed-territories', () => {
-          if (popup.current) {
-            popup.current.remove();
-          }
-        });
-      });
+    const handleMouseLeave = () => {
+      const canvas = currentMap.getCanvas();
+      canvas.style.cursor = '';
+      if (popup.current) {
+        popup.current.remove();
+      }
+    };
 
-      map.current.on('error', (e) => {
-        console.error('Mapbox error:', e);
-        setError('There was an error loading the map. Please try refreshing the page.');
-        toast({
-          title: "Map Error",
-          description: "There was an error loading the map. Please try refreshing the page.",
-          variant: "destructive",
-        });
-      });
+    currentMap.once('style.load', setupLayers);
+    
+    // Add event listeners
+    currentMap.on('mousemove', 'country-fills', handleCountryHover);
+    currentMap.on('mousemove', 'disputed-territories', handleDisputedHover);
+    currentMap.on('mouseleave', 'country-fills', handleMouseLeave);
+    currentMap.on('mouseleave', 'disputed-territories', handleMouseLeave);
 
-    } catch (err) {
-      console.error('Error initializing map:', err);
-      setError('Failed to initialize the map. Please check your internet connection and try again.');
+    currentMap.on('error', (e) => {
+      console.error('Mapbox error:', e);
+      setError('There was an error loading the map. Please try refreshing the page.');
       toast({
-        title: "Map Initialization Error",
-        description: "Failed to initialize the map. Please check your internet connection and try again.",
+        title: "Map Error",
+        description: "There was an error loading the map. Please try refreshing the page.",
         variant: "destructive",
       });
-    }
+    });
 
+    // Cleanup function
     return () => {
-      map.current?.remove();
+      if (!currentMap.isStyleLoaded()) return;
+      
+      currentMap.off('mousemove', 'country-fills', handleCountryHover);
+      currentMap.off('mousemove', 'disputed-territories', handleDisputedHover);
+      currentMap.off('mouseleave', 'country-fills', handleMouseLeave);
+      currentMap.off('mouseleave', 'disputed-territories', handleMouseLeave);
+      
+      if (popup.current) {
+        popup.current.remove();
+      }
     };
-  }, [mapboxToken, showAlliances, showDisputed]);
-
-  useEffect(() => {
-    if (!map.current || !map.current.isStyleLoaded()) return;
-    updateAllianceHighlight(map.current, selectedAlliance);
-  }, [selectedAlliance]);
+  }, [mapboxToken, showAlliances, showDisputed, selectedAlliance]);
 
   return (
     <div className="space-y-4">
