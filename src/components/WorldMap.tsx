@@ -73,7 +73,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
                   }
 
                   const alliancesList = countryAlliances
-                    .map(alliance => `${alliance.name} (joined ${alliance.joinYear})`)
+                    .map(alliance => `${alliance.name} (${alliance.members.find(m => m.code === countryCode)?.joinYear || 'N/A'})`)
                     .join('<br>');
 
                   popup.current
