@@ -51,29 +51,43 @@ const MapLayers: React.FC<MapLayersProps> = ({
       popup.remove();
     };
 
-    // Wait for style to be loaded before adding event listeners
-    if (map.isStyleLoaded()) {
+    let layersAdded = false;
+
+    const addEventListeners = () => {
+      if (!map.getLayer('country-fills')) return;
+      
       map.on('mousemove', 'country-fills', handleCountryHover);
-      map.on('mousemove', 'disputed-territories', handleDisputedHover);
       map.on('mouseleave', 'country-fills', handleMouseLeave);
-      map.on('mouseleave', 'disputed-territories', handleMouseLeave);
-    } else {
-      map.once('style.load', () => {
-        map.on('mousemove', 'country-fills', handleCountryHover);
+      
+      if (map.getLayer('disputed-territories')) {
         map.on('mousemove', 'disputed-territories', handleDisputedHover);
-        map.on('mouseleave', 'country-fills', handleMouseLeave);
         map.on('mouseleave', 'disputed-territories', handleMouseLeave);
-      });
+      }
+      
+      layersAdded = true;
+    };
+
+    if (map.isStyleLoaded()) {
+      addEventListeners();
+    } else {
+      map.once('style.load', addEventListeners);
     }
 
     return () => {
-      if (map.getLayer('country-fills')) {
-        map.off('mousemove', 'country-fills', handleCountryHover);
-        map.off('mouseleave', 'country-fills', handleMouseLeave);
-      }
-      if (map.getLayer('disputed-territories')) {
-        map.off('mousemove', 'disputed-territories', handleDisputedHover);
-        map.off('mouseleave', 'disputed-territories', handleMouseLeave);
+      if (!layersAdded || !map) return;
+      
+      try {
+        if (map.getLayer('country-fills')) {
+          map.off('mousemove', 'country-fills', handleCountryHover);
+          map.off('mouseleave', 'country-fills', handleMouseLeave);
+        }
+        
+        if (map.getLayer('disputed-territories')) {
+          map.off('mousemove', 'disputed-territories', handleDisputedHover);
+          map.off('mouseleave', 'disputed-territories', handleMouseLeave);
+        }
+      } catch (error) {
+        console.warn('Error during cleanup:', error);
       }
     };
   }, [map, popup, showAlliances, showDisputed]);

@@ -23,44 +23,58 @@ const MapInitializer: React.FC<MapInitializerProps> = ({
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
 
-    try {
-      if (mapInstance.current) {
-        mapInstance.current.remove();
-      }
+    let isMounted = true;
 
-      mapboxgl.accessToken = mapboxToken;
-      
-      const map = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
-        center: [0, 20],
-        zoom: 1.5,
-        projection: 'mercator'
-      });
-
-      map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-      map.on('style.load', () => {
-        setupCountriesLayer(map, selectedAlliance);
-        onMapInit(map);
-      });
-
-      mapInstance.current = map;
-
-      return () => {
+    const initializeMap = async () => {
+      try {
         if (mapInstance.current) {
           mapInstance.current.remove();
           mapInstance.current = null;
         }
-      };
-    } catch (err) {
-      console.error('Error initializing map:', err);
-      toast({
-        title: "Map Initialization Error",
-        description: "Failed to initialize the map. Please check your internet connection and try again.",
-        variant: "destructive",
-      });
-    }
+
+        mapboxgl.accessToken = mapboxToken;
+        
+        const map = new mapboxgl.Map({
+          container: mapContainer.current!,
+          style: 'mapbox://styles/mapbox/streets-v12',
+          center: [0, 20],
+          zoom: 1.5,
+          projection: 'mercator'
+        });
+
+        await new Promise<void>((resolve) => {
+          map.once('style.load', () => resolve());
+        });
+
+        if (!isMounted) {
+          map.remove();
+          return;
+        }
+
+        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        setupCountriesLayer(map, selectedAlliance);
+        mapInstance.current = map;
+        onMapInit(map);
+
+      } catch (err) {
+        console.error('Error initializing map:', err);
+        toast({
+          title: "Map Initialization Error",
+          description: "Failed to initialize the map. Please check your internet connection and try again.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    initializeMap();
+
+    return () => {
+      isMounted = false;
+      if (mapInstance.current) {
+        mapInstance.current.remove();
+        mapInstance.current = null;
+      }
+    };
   }, [mapboxToken, onMapInit, selectedAlliance]);
 
   return null;
