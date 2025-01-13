@@ -266,6 +266,86 @@ export const alliances: Alliance[] = [
       { code: "ARE", joinYear: 1972 }, { code: "UZB", joinYear: 1996 },
       { code: "YEM", joinYear: 1972 }
     ]
+  },
+  {
+    id: "cptpp",
+    name: "CPTPP",
+    color: "#6B4E71",
+    members: [
+      { code: "AUS", joinYear: 2018 }, { code: "BRN", joinYear: 2018 },
+      { code: "CAN", joinYear: 2018 }, { code: "CHL", joinYear: 2018 },
+      { code: "JPN", joinYear: 2018 }, { code: "MYS", joinYear: 2018 },
+      { code: "MEX", joinYear: 2018 }, { code: "NZL", joinYear: 2018 },
+      { code: "PER", joinYear: 2018 }, { code: "SGP", joinYear: 2018 },
+      { code: "VNM", joinYear: 2018 }
+    ]
+  },
+  {
+    id: "rcep",
+    name: "RCEP",
+    color: "#FF6B6B",
+    members: [
+      { code: "AUS", joinYear: 2022 }, { code: "BRN", joinYear: 2022 },
+      { code: "KHM", joinYear: 2022 }, { code: "CHN", joinYear: 2022 },
+      { code: "IDN", joinYear: 2022 }, { code: "JPN", joinYear: 2022 },
+      { code: "KOR", joinYear: 2022 }, { code: "LAO", joinYear: 2022 },
+      { code: "MYS", joinYear: 2022 }, { code: "MMR", joinYear: 2022 },
+      { code: "NZL", joinYear: 2022 }, { code: "PHL", joinYear: 2022 },
+      { code: "SGP", joinYear: 2022 }, { code: "THA", joinYear: 2022 },
+      { code: "VNM", joinYear: 2022 }
+    ]
+  },
+  {
+    id: "usmca",
+    name: "USMCA",
+    color: "#4ECDC4",
+    members: [
+      { code: "USA", joinYear: 2020 }, { code: "MEX", joinYear: 2020 },
+      { code: "CAN", joinYear: 2020 }
+    ]
+  },
+  {
+    id: "oecd",
+    name: "OECD",
+    color: "#45B7D1",
+    members: [
+      { code: "AUS", joinYear: 1971 }, { code: "AUT", joinYear: 1961 },
+      { code: "BEL", joinYear: 1961 }, { code: "CAN", joinYear: 1961 },
+      { code: "CHL", joinYear: 2010 }, { code: "COL", joinYear: 2020 },
+      { code: "CRI", joinYear: 2021 }, { code: "CZE", joinYear: 1995 },
+      { code: "DNK", joinYear: 1961 }, { code: "EST", joinYear: 2010 },
+      { code: "FIN", joinYear: 1969 }, { code: "FRA", joinYear: 1961 },
+      { code: "DEU", joinYear: 1961 }, { code: "GRC", joinYear: 1961 },
+      { code: "HUN", joinYear: 1996 }, { code: "ISL", joinYear: 1961 },
+      { code: "IRL", joinYear: 1961 }, { code: "ISR", joinYear: 2010 },
+      { code: "ITA", joinYear: 1962 }, { code: "JPN", joinYear: 1964 },
+      { code: "KOR", joinYear: 1996 }, { code: "LVA", joinYear: 2016 },
+      { code: "LTU", joinYear: 2018 }, { code: "LUX", joinYear: 1961 },
+      { code: "MEX", joinYear: 1994 }, { code: "NLD", joinYear: 1961 },
+      { code: "NZL", joinYear: 1973 }, { code: "NOR", joinYear: 1961 },
+      { code: "POL", joinYear: 1996 }, { code: "PRT", joinYear: 1961 },
+      { code: "SVK", joinYear: 2000 }, { code: "SVN", joinYear: 2010 },
+      { code: "ESP", joinYear: 1961 }, { code: "SWE", joinYear: 1961 },
+      { code: "CHE", joinYear: 1961 }, { code: "TUR", joinYear: 1961 },
+      { code: "GBR", joinYear: 1961 }, { code: "USA", joinYear: 1961 }
+    ]
+  },
+  {
+    id: "g20",
+    name: "G20",
+    color: "#FF9F1C",
+    members: [
+      { code: "ARG", joinYear: 1999 }, { code: "AUS", joinYear: 1999 },
+      { code: "BRA", joinYear: 1999 }, { code: "CAN", joinYear: 1999 },
+      { code: "CHN", joinYear: 1999 }, { code: "FRA", joinYear: 1999 },
+      { code: "DEU", joinYear: 1999 }, { code: "IND", joinYear: 1999 },
+      { code: "IDN", joinYear: 1999 }, { code: "ITA", joinYear: 1999 },
+      { code: "JPN", joinYear: 1999 }, { code: "KOR", joinYear: 1999 },
+      { code: "MEX", joinYear: 1999 }, { code: "RUS", joinYear: 1999 },
+      { code: "SAU", joinYear: 1999 }, { code: "ZAF", joinYear: 1999 },
+      { code: "TUR", joinYear: 1999 }, { code: "GBR", joinYear: 1999 },
+      { code: "USA", joinYear: 1999 }, { code: "EU", joinYear: 1999 }
+    ]
   }
 ];
 

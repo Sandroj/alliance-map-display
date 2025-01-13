@@ -3,10 +3,11 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Alliance } from '@/data/alliances';
 import MapTokenInput from './MapTokenInput';
-import { initializeMap, setupCountriesLayer, updateAllianceHighlight, findCountryAlliances } from '@/utils/mapUtils';
+import { initializeMap, setupCountriesLayer, updateAllianceHighlight } from '@/utils/mapUtils';
 import { Alert, AlertDescription } from './ui/alert';
 import { useToast } from './ui/use-toast';
-import { Checkbox } from './ui/checkbox';
+import MapControls from './MapControls';
+import { createCountryPopup, createDisputePopup } from './MapPopup';
 import { alliances } from '@/data/alliances';
 
 interface WorldMapProps {
@@ -49,9 +50,11 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
         if (showDisputed) {
           map.current.setLayoutProperty('admin-1-boundary-disputed', 'visibility', 'visible');
           map.current.setLayoutProperty('admin-0-boundary-disputed', 'visibility', 'visible');
+          map.current.setPaintProperty('admin-0-boundary-disputed', 'line-color', '#FF0000');
+          map.current.setPaintProperty('admin-0-boundary-disputed', 'line-width', 2);
+          map.current.setPaintProperty('admin-0-boundary-disputed', 'line-dasharray', [2, 2]);
         }
 
-        // Add hover effect
         map.current.on('mousemove', 'country-fills', (e) => {
           if (e.features && e.features[0]?.properties) {
             const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
@@ -62,40 +65,25 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
               canvas.style.cursor = 'pointer';
 
               if (showAlliances) {
-                const countryAlliances = findCountryAlliances(countryCode, alliances);
-                
-                if (countryAlliances.length > 0) {
-                  if (!popup.current) {
-                    popup.current = new mapboxgl.Popup({
-                      closeButton: false,
-                      className: 'bg-white rounded-md shadow-lg p-2'
-                    });
-                  }
-
-                  const alliancesList = countryAlliances
-                    .map(alliance => `${alliance.name} (${alliance.members.find(m => m.code === countryCode)?.joinYear || 'N/A'})`)
-                    .join('<br>');
-
-                  popup.current
-                    .setLngLat(e.lngLat)
-                    .setHTML(`
-                      <div class="font-semibold">${countryName}</div>
-                      <div class="text-sm text-gray-600">Member of:</div>
-                      <div class="text-sm">${alliancesList}</div>
-                    `)
-                    .addTo(map.current);
+                if (!popup.current) {
+                  popup.current = new mapboxgl.Popup({
+                    closeButton: false,
+                    className: 'bg-white rounded-md shadow-lg p-2'
+                  });
                 }
+
+                popup.current
+                  .setLngLat(e.lngLat)
+                  .setHTML(createCountryPopup(countryName, countryCode, alliances))
+                  .addTo(map.current);
               }
             }
           }
         });
 
-        // Add hover effect for disputed territories
         if (showDisputed) {
           map.current.on('mousemove', 'admin-0-boundary-disputed', (e) => {
             if (e.features && e.features[0]) {
-              const disputeInfo = getDisputeInfo(e.features[0].properties);
-              
               if (!popup.current) {
                 popup.current = new mapboxgl.Popup({
                   closeButton: false,
@@ -105,10 +93,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
 
               popup.current
                 .setLngLat(e.lngLat)
-                .setHTML(`
-                  <div class="font-semibold">Disputed Territory</div>
-                  <div class="text-sm">${disputeInfo}</div>
-                `)
+                .setHTML(createDisputePopup(e.features[0].properties))
                 .addTo(map.current);
             }
           });
@@ -152,53 +137,14 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
     updateAllianceHighlight(map.current, selectedAlliance);
   }, [selectedAlliance]);
 
-  const getDisputeInfo = (properties: any) => {
-    // This is a simplified version. In a real application, you would want to maintain
-    // a comprehensive database of disputed territories and their details
-    const disputeInfo: { [key: string]: string } = {
-      'Kashmir': 'Disputed between India, Pakistan, and China since 1947',
-      'Crimea': 'Annexed by Russia from Ukraine in 2014, internationally disputed',
-      'West Bank': 'Disputed between Israel and Palestinian territories',
-      'South China Sea': 'Multiple territorial disputes involving China, Vietnam, Philippines, and others',
-      'Kuril Islands': 'Disputed between Japan and Russia since World War II'
-    };
-
-    // You would need to match the properties from the Mapbox data
-    // to your dispute database. This is a simplified example:
-    return disputeInfo[properties.name] || 'Territory under dispute';
-  };
-
   return (
     <div className="space-y-4">
-      <div className="flex flex-col space-y-2">
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="show-alliances"
-            checked={showAlliances}
-            onCheckedChange={(checked) => setShowAlliances(checked as boolean)}
-          />
-          <label
-            htmlFor="show-alliances"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Show country alliance memberships on hover
-          </label>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="show-disputed"
-            checked={showDisputed}
-            onCheckedChange={(checked) => setShowDisputed(checked as boolean)}
-          />
-          <label
-            htmlFor="show-disputed"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Show disputed territories
-          </label>
-        </div>
-      </div>
+      <MapControls
+        showAlliances={showAlliances}
+        setShowAlliances={setShowAlliances}
+        showDisputed={showDisputed}
+        setShowDisputed={setShowDisputed}
+      />
 
       <div className="relative w-full h-[calc(100vh-12rem)]">
         {error && (
