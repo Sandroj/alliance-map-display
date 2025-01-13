@@ -7,7 +7,6 @@ import { initializeMap, setupCountriesLayer, updateAllianceHighlight } from '@/u
 import { Alert, AlertDescription } from './ui/alert';
 import { useToast } from './ui/use-toast';
 import MapControls from './MapControls';
-import AllianceButtons from './AllianceButtons';
 import { createCountryPopup, createDisputePopup } from './MapPopup';
 import { alliances } from '@/data/alliances';
 
@@ -31,29 +30,54 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
     if (!mapContainer.current || !mapboxToken) return;
 
     try {
-      map.current = initializeMap(mapContainer.current, mapboxToken);
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v12', // Changed to streets-v12 which includes disputed territories
+        center: [0, 20],
+        zoom: 1.5,
+        projection: 'mercator',
+        accessToken: mapboxToken
+      });
+
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
       map.current.on('load', () => {
         if (!map.current) return;
-        setupCountriesLayer(map.current, selectedAlliance);
 
-        // Add disputed territories layers
-        if (showDisputed) {
-          // Add disputed territories style
-          map.current.setPaintProperty('disputed_territory', 'fill-color', '#FF0000');
-          map.current.setPaintProperty('disputed_territory', 'fill-opacity', 0.3);
-          map.current.setLayoutProperty('disputed_territory', 'visibility', 'visible');
-          
-          // Add disputed boundaries style
-          map.current.setPaintProperty('disputed_border', 'line-color', '#FF0000');
-          map.current.setPaintProperty('disputed_border', 'line-width', 2);
-          map.current.setPaintProperty('disputed_border', 'line-dasharray', [2, 2]);
-          map.current.setLayoutProperty('disputed_border', 'visibility', 'visible');
-        } else {
-          map.current.setLayoutProperty('disputed_territory', 'visibility', 'none');
-          map.current.setLayoutProperty('disputed_border', 'visibility', 'none');
-        }
+        // Add disputed territories layer
+        map.current.addLayer({
+          id: 'disputed-territories',
+          type: 'fill',
+          source: {
+            type: 'vector',
+            url: 'mapbox://mapbox.boundaries-adm0-v3'
+          },
+          'source-layer': 'boundaries_admin_0',
+          filter: ['==', ['get', 'disputed'], 'true'],
+          paint: {
+            'fill-color': '#FF0000',
+            'fill-opacity': 0.3
+          }
+        });
+
+        // Add disputed boundaries layer
+        map.current.addLayer({
+          id: 'disputed-boundaries',
+          type: 'line',
+          source: {
+            type: 'vector',
+            url: 'mapbox://mapbox.boundaries-adm0-v3'
+          },
+          'source-layer': 'boundaries_admin_0',
+          filter: ['==', ['get', 'disputed'], 'true'],
+          paint: {
+            'line-color': '#FF0000',
+            'line-width': 2,
+            'line-dasharray': [2, 2]
+          }
+        });
+
+        setupCountriesLayer(map.current, selectedAlliance);
 
         // Handle country hover events
         map.current.on('mousemove', 'country-fills', (e) => {
@@ -83,23 +107,21 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
         });
 
         // Handle disputed territory hover events
-        if (showDisputed) {
-          map.current.on('mousemove', 'disputed_territory', (e) => {
-            if (e.features && e.features[0]) {
-              if (!popup.current) {
-                popup.current = new mapboxgl.Popup({
-                  closeButton: false,
-                  className: 'bg-white rounded-md shadow-lg p-2'
-                });
-              }
-
-              popup.current
-                .setLngLat(e.lngLat)
-                .setHTML(createDisputePopup(e.features[0].properties))
-                .addTo(map.current);
+        map.current.on('mousemove', 'disputed-territories', (e) => {
+          if (e.features && e.features[0]) {
+            if (!popup.current) {
+              popup.current = new mapboxgl.Popup({
+                closeButton: false,
+                className: 'bg-white rounded-md shadow-lg p-2'
+              });
             }
-          });
-        }
+
+            popup.current
+              .setLngLat(e.lngLat)
+              .setHTML(createDisputePopup(e.features[0].properties))
+              .addTo(map.current);
+          }
+        });
 
         // Handle mouse leave events
         map.current.on('mouseleave', 'country-fills', () => {
@@ -112,13 +134,11 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
           }
         });
 
-        if (showDisputed) {
-          map.current.on('mouseleave', 'disputed_territory', () => {
-            if (popup.current) {
-              popup.current.remove();
-            }
-          });
-        }
+        map.current.on('mouseleave', 'disputed-territories', () => {
+          if (popup.current) {
+            popup.current.remove();
+          }
+        });
       });
 
       map.current.on('error', (e) => {
@@ -153,16 +173,6 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
 
   return (
     <div className="space-y-4">
-      <AllianceButtons
-        alliances={alliances}
-        selectedAlliance={selectedAlliance}
-        onSelect={(alliance) => {
-          if (map.current) {
-            updateAllianceHighlight(map.current, alliance);
-          }
-        }}
-      />
-      
       <MapControls
         showAlliances={showAlliances}
         setShowAlliances={setShowAlliances}
