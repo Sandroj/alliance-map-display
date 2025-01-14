@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Alliance } from '@/data/alliances';
+import { Alliance, alliances } from '@/data/alliances';
 import MapTokenInput from './MapTokenInput';
 import { initializeMap, setupCountriesLayer, updateAllianceHighlight, findCountryAlliances } from '@/utils/mapUtils';
 import { Alert, AlertDescription } from './ui/alert';
 import { useToast } from './ui/use-toast';
 import { Checkbox } from './ui/checkbox';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
-import { alliances } from '@/data/alliances';
 
 interface WorldMapProps {
   selectedAlliance: Alliance | null;
@@ -46,7 +44,6 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
         if (!map.current) return;
         setupCountriesLayer(map.current, selectedAlliance);
 
-        // Add hover effect
         map.current.on('mousemove', 'country-fills', (e) => {
           if (e.features && e.features[0]?.properties) {
             const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
@@ -68,7 +65,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
                   }
 
                   const alliancesList = countryAlliances
-                    .map(alliance => alliance.name)
+                    .map(({ alliance, joinYear }) => `${alliance.name} (joined ${joinYear})`)
                     .join('<br>');
 
                   popup.current

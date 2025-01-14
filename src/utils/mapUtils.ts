@@ -13,7 +13,6 @@ export const initializeMap = (container: HTMLDivElement, token: string) => {
 };
 
 export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Alliance | null) => {
-  // Add the countries source if it doesn't exist
   if (!map.getSource('countries')) {
     map.addSource('countries', {
       type: 'vector',
@@ -21,11 +20,9 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     });
   }
 
-  // Remove existing layers if they exist
   if (map.getLayer('country-fills')) map.removeLayer('country-fills');
   if (map.getLayer('country-borders')) map.removeLayer('country-borders');
 
-  // Add fill layer
   map.addLayer({
     id: 'country-fills',
     type: 'fill',
@@ -37,7 +34,6 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     }
   });
 
-  // Add border layer
   map.addLayer({
     id: 'country-borders',
     type: 'line',
@@ -49,7 +45,6 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     }
   });
 
-  // Move all symbol layers to the top
   const layers = map.getStyle().layers;
   const labelLayerIds = layers
     .filter(layer => layer.type === 'symbol')
@@ -68,27 +63,30 @@ export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | 
   if (!map.getLayer('country-fills')) return;
 
   if (alliance) {
-    // Set a single, consistent color for all alliance members using a literal expression
-    const allianceColor = alliance.color;
-    
-    // Use a literal expression to ensure consistent color application
+    const memberCodes = alliance.members.map(member => member.code);
     map.setPaintProperty('country-fills', 'fill-color', [
       'match',
       ['get', 'iso_3166_1_alpha_3'],
-      alliance.members,
-      allianceColor,
+      memberCodes,
+      alliance.color,
       '#FFFFFF'
     ]);
-    
-    // Set a consistent opacity for all countries
     map.setPaintProperty('country-fills', 'fill-opacity', 0.7);
   } else {
-    // Reset to default white color
     map.setPaintProperty('country-fills', 'fill-color', '#FFFFFF');
     map.setPaintProperty('country-fills', 'fill-opacity', 0.7);
   }
 };
 
-export const findCountryAlliances = (countryCode: string, alliances: Alliance[]): Alliance[] => {
-  return alliances.filter(alliance => alliance.members.includes(countryCode));
+export const findCountryAlliances = (countryCode: string, alliances: Alliance[]): Array<{alliance: Alliance, joinYear: number}> => {
+  return alliances.reduce((acc, alliance) => {
+    const membership = alliance.members.find(member => member.code === countryCode);
+    if (membership) {
+      acc.push({
+        alliance,
+        joinYear: membership.joinYear
+      });
+    }
+    return acc;
+  }, [] as Array<{alliance: Alliance, joinYear: number}>);
 };
