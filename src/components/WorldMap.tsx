@@ -7,6 +7,8 @@ import { initializeMap, setupCountriesLayer, updateAllianceHighlight, findCountr
 import { Alert, AlertDescription } from './ui/alert';
 import { useToast } from './ui/use-toast';
 import { Checkbox } from './ui/checkbox';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
+import { alliances } from '@/data/alliances';
 
 interface WorldMapProps {
   selectedAlliance: Alliance | null;
@@ -44,6 +46,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
         if (!map.current) return;
         setupCountriesLayer(map.current, selectedAlliance);
 
+        // Add hover effect
         map.current.on('mousemove', 'country-fills', (e) => {
           if (e.features && e.features[0]?.properties) {
             const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
@@ -65,7 +68,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
                   }
 
                   const alliancesList = countryAlliances
-                    .map(({ alliance, joinYear }) => `${alliance.name} (joined ${joinYear})`)
+                    .map(alliance => alliance.name)
                     .join('<br>');
 
                   popup.current
