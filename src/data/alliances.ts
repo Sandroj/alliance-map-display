@@ -2,10 +2,7 @@ export interface Alliance {
   id: string;
   name: string;
   color: string;
-  members: Array<{
-    code: string;
-    joinYear: number;
-  }>;
+  members: string[];
 }
 
 export const alliances: Alliance[] = [
@@ -13,348 +10,66 @@ export const alliances: Alliance[] = [
     id: "nato",
     name: "NATO",
     color: "#004B87",
-    members: [
-      { code: "USA", joinYear: 1949 }, { code: "GBR", joinYear: 1949 }, 
-      { code: "FRA", joinYear: 1949 }, { code: "DEU", joinYear: 1955 },
-      { code: "ITA", joinYear: 1949 }, { code: "ESP", joinYear: 1982 },
-      { code: "CAN", joinYear: 1949 }, { code: "POL", joinYear: 1999 },
-      { code: "TUR", joinYear: 1952 }, { code: "NLD", joinYear: 1949 },
-      { code: "BEL", joinYear: 1949 }, { code: "DNK", joinYear: 1949 },
-      { code: "NOR", joinYear: 1949 }, { code: "LUX", joinYear: 1949 },
-      { code: "ISL", joinYear: 1949 }, { code: "GRC", joinYear: 1952 },
-      { code: "PRT", joinYear: 1949 }, { code: "CZE", joinYear: 1999 },
-      { code: "HUN", joinYear: 1999 }, { code: "ROU", joinYear: 2004 },
-      { code: "BGR", joinYear: 2004 }, { code: "SVK", joinYear: 2004 },
-      { code: "SVN", joinYear: 2004 }, { code: "EST", joinYear: 2004 },
-      { code: "LVA", joinYear: 2004 }, { code: "LTU", joinYear: 2004 },
-      { code: "ALB", joinYear: 2009 }, { code: "HRV", joinYear: 2009 },
-      { code: "MNE", joinYear: 2017 }, { code: "MKD", joinYear: 2020 },
-      { code: "FIN", joinYear: 2023 }, { code: "SWE", joinYear: 2023 }
-    ]
+    members: ["USA", "GBR", "FRA", "DEU", "ITA", "ESP", "CAN", "POL", "TUR", "NLD", "BEL", "DNK", "NOR", "LUX", "ISL", "GRC", "PRT", "CZE", "HUN", "ROU", "BGR", "SVK", "SVN", "EST", "LVA", "LTU", "ALB", "HRV", "MNE", "MKD", "FIN", "SWE"]
   },
   {
     id: "eu",
     name: "European Union",
     color: "#003399",
-    members: [
-      { code: "AUT", joinYear: 1958 }, { code: "BEL", joinYear: 1958 },
-      { code: "BGR", joinYear: 2007 }, { code: "HRV", joinYear: 2013 },
-      { code: "CYP", joinYear: 2004 }, { code: "CZE", joinYear: 2004 },
-      { code: "DNK", joinYear: 1973 }, { code: "EST", joinYear: 2004 },
-      { code: "FIN", joinYear: 1995 }, { code: "FRA", joinYear: 1958 },
-      { code: "DEU", joinYear: 1958 }, { code: "GRC", joinYear: 1981 },
-      { code: "HUN", joinYear: 2004 }, { code: "IRL", joinYear: 1973 },
-      { code: "ITA", joinYear: 1958 }, { code: "LVA", joinYear: 2004 },
-      { code: "LTU", joinYear: 2004 }, { code: "LUX", joinYear: 1958 },
-      { code: "MLT", joinYear: 2004 }, { code: "NLD", joinYear: 1958 },
-      { code: "POL", joinYear: 2004 }, { code: "PRT", joinYear: 1986 },
-      { code: "ROU", joinYear: 2007 }, { code: "SVK", joinYear: 2004 },
-      { code: "SVN", joinYear: 2004 }, { code: "ESP", joinYear: 1986 },
-      { code: "SWE", joinYear: 1995 }
-    ]
+    members: ["AUT", "BEL", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "FRA", "DEU", "GRC", "HUN", "IRL", "ITA", "LVA", "LTU", "LUX", "MLT", "NLD", "POL", "PRT", "ROU", "SVK", "SVN", "ESP", "SWE"]
   },
   {
     id: "asean",
     name: "ASEAN",
     color: "#BD1E51",
-    members: [
-      { code: "BRN", joinYear: 1967 }, { code: "KHM", joinYear: 1999 },
-      { code: "IDN", joinYear: 1967 }, { code: "LAO", joinYear: 1997 },
-      { code: "MYS", joinYear: 1967 }, { code: "MMR", joinYear: 1997 },
-      { code: "PHL", joinYear: 1967 }, { code: "SGP", joinYear: 1967 },
-      { code: "THA", joinYear: 1967 }, { code: "VNM", joinYear: 1995 }
-    ]
+    members: ["BRN", "KHM", "IDN", "LAO", "MYS", "MMR", "PHL", "SGP", "THA", "VNM"]
   },
   {
     id: "brics",
     name: "BRICS",
     color: "#F39237",
-    members: [
-      { code: "BRA", joinYear: 2010 }, { code: "RUS", joinYear: 2010 },
-      { code: "IND", joinYear: 2010 }, { code: "CHN", joinYear: 2010 },
-      { code: "ZAF", joinYear: 2010 }
-    ]
+    members: ["BRA", "RUS", "IND", "CHN", "ZAF"]
   },
   {
     id: "g7",
     name: "G7",
     color: "#2E5090",
-    members: [
-      { code: "USA", joinYear: 1976 }, { code: "GBR", joinYear: 1976 },
-      { code: "FRA", joinYear: 1976 }, { code: "DEU", joinYear: 1976 },
-      { code: "ITA", joinYear: 1976 }, { code: "JPN", joinYear: 1976 },
-      { code: "CAN", joinYear: 1976 }
-    ]
+    members: ["USA", "GBR", "FRA", "DEU", "ITA", "JPN", "CAN"]
   },
   {
     id: "opec",
     name: "OPEC",
     color: "#006B3E",
-    members: [
-      { code: "DZA", joinYear: 1960 }, { code: "AGO", joinYear: 2007 },
-      { code: "COG", joinYear: 2016 }, { code: "GNQ", joinYear: 2011 },
-      { code: "GAB", joinYear: 1975 }, { code: "IRN", joinYear: 1960 },
-      { code: "IRQ", joinYear: 1960 }, { code: "KWT", joinYear: 1960 },
-      { code: "LBY", joinYear: 1960 }, { code: "NGA", joinYear: 1971 },
-      { code: "SAU", joinYear: 1960 }, { code: "ARE", joinYear: 1967 },
-      { code: "VEN", joinYear: 1960 }
-    ]
+    members: ["DZA", "AGO", "COG", "GNQ", "GAB", "IRN", "IRQ", "KWT", "LBY", "NGA", "SAU", "ARE", "VEN"]
   },
   {
     id: "icc",
     name: "ICC",
     color: "#8B4513",
-    members: [
-      { code: "AFG", joinYear: 2001 }, { code: "ALB", joinYear: 2001 },
-      { code: "AND", joinYear: 2001 }, { code: "ATG", joinYear: 2001 },
-      { code: "ARG", joinYear: 2001 }, { code: "AUS", joinYear: 2001 },
-      { code: "AUT", joinYear: 2001 }, { code: "BGD", joinYear: 2001 },
-      { code: "BRB", joinYear: 2001 }, { code: "BEL", joinYear: 2001 },
-      { code: "BLZ", joinYear: 2001 }, { code: "BEN", joinYear: 2001 },
-      { code: "BOL", joinYear: 2001 }, { code: "BIH", joinYear: 2001 },
-      { code: "BWA", joinYear: 2001 }, { code: "BRA", joinYear: 2001 },
-      { code: "BGR", joinYear: 2001 }, { code: "BFA", joinYear: 2001 },
-      { code: "BDI", joinYear: 2001 }, { code: "CPV", joinYear: 2001 },
-      { code: "KHM", joinYear: 2001 }, { code: "CMR", joinYear: 2001 },
-      { code: "CAN", joinYear: 2001 }, { code: "CAF", joinYear: 2001 },
-      { code: "TCD", joinYear: 2001 }, { code: "CHL", joinYear: 2001 },
-      { code: "COL", joinYear: 2001 }, { code: "COM", joinYear: 2001 },
-      { code: "COG", joinYear: 2001 }, { code: "COK", joinYear: 2001 },
-      { code: "CRI", joinYear: 2001 }, { code: "HRV", joinYear: 2001 },
-      { code: "CYP", joinYear: 2001 }, { code: "CZE", joinYear: 2001 },
-      { code: "COD", joinYear: 2001 }, { code: "DNK", joinYear: 2001 },
-      { code: "DJI", joinYear: 2001 }, { code: "DMA", joinYear: 2001 },
-      { code: "DOM", joinYear: 2001 }, { code: "ECU", joinYear: 2001 },
-      { code: "SLV", joinYear: 2001 }, { code: "EST", joinYear: 2001 },
-      { code: "FJI", joinYear: 2001 }, { code: "FIN", joinYear: 2001 },
-      { code: "FRA", joinYear: 2001 }, { code: "GAB", joinYear: 2001 },
-      { code: "GMB", joinYear: 2001 }, { code: "GEO", joinYear: 2001 },
-      { code: "DEU", joinYear: 2001 }, { code: "GHA", joinYear: 2001 },
-      { code: "GRC", joinYear: 2001 }, { code: "GRD", joinYear: 2001 },
-      { code: "GTM", joinYear: 2001 }, { code: "GIN", joinYear: 2001 },
-      { code: "GNB", joinYear: 2001 }, { code: "GUY", joinYear: 2001 },
-      { code: "HND", joinYear: 2001 }, { code: "HUN", joinYear: 2001 },
-      { code: "ISL", joinYear: 2001 }, { code: "IRL", joinYear: 2001 },
-      { code: "ITA", joinYear: 2001 }, { code: "CIV", joinYear: 2001 },
-      { code: "JPN", joinYear: 2001 }, { code: "JOR", joinYear: 2001 },
-      { code: "KEN", joinYear: 2001 }, { code: "KIR", joinYear: 2001 },
-      { code: "LVA", joinYear: 2001 }, { code: "LSO", joinYear: 2001 },
-      { code: "LBR", joinYear: 2001 }, { code: "LIE", joinYear: 2001 },
-      { code: "LTU", joinYear: 2001 }, { code: "LUX", joinYear: 2001 },
-      { code: "MDG", joinYear: 2001 }, { code: "MWI", joinYear: 2001 },
-      { code: "MDV", joinYear: 2001 }, { code: "MLI", joinYear: 2001 },
-      { code: "MLT", joinYear: 2001 }, { code: "MHL", joinYear: 2001 },
-      { code: "MUS", joinYear: 2001 }, { code: "MEX", joinYear: 2001 },
-      { code: "MDA", joinYear: 2001 }, { code: "MNG", joinYear: 2001 },
-      { code: "MNE", joinYear: 2001 }, { code: "NAM", joinYear: 2001 },
-      { code: "NRU", joinYear: 2001 }, { code: "NLD", joinYear: 2001 },
-      { code: "NZL", joinYear: 2001 }, { code: "NER", joinYear: 2001 },
-      { code: "NGA", joinYear: 2001 }, { code: "MKD", joinYear: 2001 },
-      { code: "NOR", joinYear: 2001 }, { code: "PAN", joinYear: 2001 },
-      { code: "PRY", joinYear: 2001 }, { code: "PER", joinYear: 2001 },
-      { code: "PHL", joinYear: 2001 }, { code: "POL", joinYear: 2001 },
-      { code: "PRT", joinYear: 2001 }, { code: "KOR", joinYear: 2001 },
-      { code: "ROU", joinYear: 2001 }, { code: "WSM", joinYear: 2001 },
-      { code: "SMR", joinYear: 2001 }, { code: "SEN", joinYear: 2001 },
-      { code: "SRB", joinYear: 2001 }, { code: "SYC", joinYear: 2001 },
-      { code: "SLE", joinYear: 2001 }, { code: "SVK", joinYear: 2001 },
-      { code: "SVN", joinYear: 2001 }, { code: "SLB", joinYear: 2001 },
-      { code: "ZAF", joinYear: 2001 }, { code: "ESP", joinYear: 2001 },
-      { code: "LKA", joinYear: 2001 }, { code: "KNA", joinYear: 2001 },
-      { code: "LCA", joinYear: 2001 }, { code: "VCT", joinYear: 2001 },
-      { code: "SUR", joinYear: 2001 }, { code: "SWE", joinYear: 2001 },
-      { code: "CHE", joinYear: 2001 }, { code: "TJK", joinYear: 2001 },
-      { code: "TZA", joinYear: 2001 }, { code: "TLS", joinYear: 2001 },
-      { code: "TTO", joinYear: 2001 }, { code: "TUN", joinYear: 2001 },
-      { code: "GBR", joinYear: 2001 }, { code: "UGA", joinYear: 2001 },
-      { code: "URY", joinYear: 2001 }, { code: "VUT", joinYear: 2001 },
-      { code: "VEN", joinYear: 2001 }, { code: "ZMB", joinYear: 2001 }
-    ]
+    members: ["AFG", "ALB", "AND", "ATG", "ARG", "AUS", "AUT", "BGD", "BRB", "BEL", "BLZ", "BEN", "BOL", "BIH", "BWA", "BRA", "BGR", "BFA", "BDI", "CPV", "KHM", "CMR", "CAN", "CAF", "TCD", "CHL", "COL", "COM", "COG", "COK", "CRI", "HRV", "CYP", "CZE", "COD", "DNK", "DJI", "DMA", "DOM", "ECU", "SLV", "EST", "FJI", "FIN", "FRA", "GAB", "GMB", "GEO", "DEU", "GHA", "GRC", "GRD", "GTM", "GIN", "GNB", "GUY", "HND", "HUN", "ISL", "IRL", "ITA", "CIV", "JPN", "JOR", "KEN", "KIR", "LVA", "LSO", "LBR", "LIE", "LTU", "LUX", "MDG", "MWI", "MDV", "MLI", "MLT", "MHL", "MUS", "MEX", "MDA", "MNG", "MNE", "NAM", "NRU", "NLD", "NZL", "NER", "NGA", "MKD", "NOR", "PAN", "PRY", "PER", "PHL", "POL", "PRT", "KOR", "ROU", "WSM", "SMR", "SEN", "SRB", "SYC", "SLE", "SVK", "SVN", "SLB", "ZAF", "ESP", "LKA", "KNA", "LCA", "VCT", "SUR", "SWE", "CHE", "TJK", "TZA", "TLS", "TTO", "TUN", "GBR", "UGA", "URY", "VUT", "VEN", "ZMB"]
   },
   {
     id: "bri",
     name: "Belt and Road Initiative",
     color: "#E63946",
-    members: [
-      { code: "CHN", joinYear: 2013 }, { code: "PAK", joinYear: 2015 },
-      { code: "BGD", joinYear: 2016 }, { code: "MMR", joinYear: 2017 },
-      { code: "LKA", joinYear: 2017 }, { code: "NPL", joinYear: 2017 },
-      { code: "AFG", joinYear: 2017 }, { code: "KAZ", joinYear: 2017 },
-      { code: "KGZ", joinYear: 2017 }, { code: "TJK", joinYear: 2017 },
-      { code: "UZB", joinYear: 2017 }, { code: "TKM", joinYear: 2017 },
-      { code: "IRN", joinYear: 2016 }, { code: "IRQ", joinYear: 2017 },
-      { code: "SYR", joinYear: 2017 }, { code: "TUR", joinYear: 2017 },
-      { code: "SAU", joinYear: 2017 }, { code: "EGY", joinYear: 2017 },
-      { code: "ETH", joinYear: 2017 }, { code: "KEN", joinYear: 2017 },
-      { code: "TZA", joinYear: 2017 }, { code: "ZAF", joinYear: 2017 },
-      { code: "AGO", joinYear: 2017 }, { code: "NGA", joinYear: 2017 },
-      { code: "DZA", joinYear: 2017 }, { code: "MAR", joinYear: 2017 },
-      { code: "ITA", joinYear: 2017 }, { code: "GRC", joinYear: 2017 },
-      { code: "HUN", joinYear: 2017 }, { code: "POL", joinYear: 2017 },
-      { code: "RUS", joinYear: 2017 }, { code: "MNG", joinYear: 2017 },
-      { code: "IDN", joinYear: 2017 }, { code: "MYS", joinYear: 2017 },
-      { code: "THA", joinYear: 2017 }, { code: "VNM", joinYear: 2017 },
-      { code: "KHM", joinYear: 2017 }, { code: "LAO", joinYear: 2017 },
-      { code: "PHL", joinYear: 2017 }
-    ]
+    members: ["CHN", "PAK", "BGD", "MMR", "LKA", "NPL", "AFG", "KAZ", "KGZ", "TJK", "UZB", "TKM", "IRN", "IRQ", "SYR", "TUR", "SAU", "EGY", "ETH", "KEN", "TZA", "ZAF", "AGO", "NGA", "DZA", "MAR", "ITA", "GRC", "HUN", "POL", "RUS", "MNG", "IDN", "MYS", "THA", "VNM", "KHM", "LAO", "PHL"]
   },
   {
     id: "quad",
     name: "QUAD",
     color: "#4A90E2",
-    members: [
-      { code: "USA", joinYear: 2007 }, { code: "JPN", joinYear: 2007 },
-      { code: "IND", joinYear: 2007 }, { code: "AUS", joinYear: 2007 }
-    ]
+    members: ["USA", "JPN", "IND", "AUS"]
   },
   {
     id: "celac",
     name: "CELAC",
     color: "#45B7D1",
-    members: [
-      { code: "ATG", joinYear: 2011 }, { code: "ARG", joinYear: 2011 },
-      { code: "BHS", joinYear: 2011 }, { code: "BRB", joinYear: 2011 },
-      { code: "BLZ", joinYear: 2011 }, { code: "BOL", joinYear: 2011 },
-      { code: "BRA", joinYear: 2011 }, { code: "CHL", joinYear: 2011 },
-      { code: "COL", joinYear: 2011 }, { code: "CRI", joinYear: 2011 },
-      { code: "CUB", joinYear: 2011 }, { code: "DMA", joinYear: 2011 },
-      { code: "DOM", joinYear: 2011 }, { code: "ECU", joinYear: 2011 },
-      { code: "SLV", joinYear: 2011 }, { code: "GRD", joinYear: 2011 },
-      { code: "GTM", joinYear: 2011 }, { code: "GUY", joinYear: 2011 },
-      { code: "HTI", joinYear: 2011 }, { code: "HND", joinYear: 2011 },
-      { code: "JAM", joinYear: 2011 }, { code: "MEX", joinYear: 2011 },
-      { code: "NIC", joinYear: 2011 }, { code: "PAN", joinYear: 2011 },
-      { code: "PRY", joinYear: 2011 }, { code: "PER", joinYear: 2011 },
-      { code: "KNA", joinYear: 2011 }, { code: "LCA", joinYear: 2011 },
-      { code: "VCT", joinYear: 2011 }, { code: "SUR", joinYear: 2011 },
-      { code: "TTO", joinYear: 2011 }, { code: "URY", joinYear: 2011 },
-      { code: "VEN", joinYear: 2011 }
-    ]
+    members: ["ATG", "ARG", "BHS", "BRB", "BLZ", "BOL", "BRA", "CHL", "COL", "CRI", "CUB", "DMA", "DOM", "ECU", "SLV", "GRD", "GTM", "GUY", "HTI", "HND", "JAM", "MEX", "NIC", "PAN", "PRY", "PER", "KNA", "LCA", "VCT", "SUR", "TTO", "URY", "VEN"]
   },
   {
     id: "oic",
     name: "OIC",
     color: "#2A9D8F",
-    members: [
-      { code: "AFG", joinYear: 1969 }, { code: "ALB", joinYear: 1992 },
-      { code: "DZA", joinYear: 1969 }, { code: "AZE", joinYear: 1991 },
-      { code: "BHR", joinYear: 1970 }, { code: "BGD", joinYear: 1974 },
-      { code: "BEN", joinYear: 1970 }, { code: "BRN", joinYear: 1984 },
-      { code: "BFA", joinYear: 1973 }, { code: "CMR", joinYear: 1972 },
-      { code: "TCD", joinYear: 1972 }, { code: "COM", joinYear: 1975 },
-      { code: "CIV", joinYear: 2000 }, { code: "DJI", joinYear: 1974 },
-      { code: "EGY", joinYear: 1969 }, { code: "GAB", joinYear: 1972 },
-      { code: "GMB", joinYear: 1972 }, { code: "GIN", joinYear: 1972 },
-      { code: "GNB", joinYear: 1972 }, { code: "GUY", joinYear: 1972 },
-      { code: "IDN", joinYear: 1969 }, { code: "IRN", joinYear: 1969 },
-      { code: "IRQ", joinYear: 1969 }, { code: "JOR", joinYear: 1972 },
-      { code: "KAZ", joinYear: 1995 }, { code: "KWT", joinYear: 1969 },
-      { code: "KGZ", joinYear: 1994 }, { code: "LBN", joinYear: 1970 },
-      { code: "LBY", joinYear: 1970 }, { code: "MYS", joinYear: 1970 },
-      { code: "MDV", joinYear: 1984 }, { code: "MLI", joinYear: 1972 },
-      { code: "MRT", joinYear: 1973 }, { code: "MAR", joinYear: 1969 },
-      { code: "MOZ", joinYear: 1994 }, { code: "NER", joinYear: 1972 },
-      { code: "NGA", joinYear: 1970 }, { code: "OMN", joinYear: 1970 },
-      { code: "PAK", joinYear: 1970 }, { code: "PSE", joinYear: 1970 },
-      { code: "QAT", joinYear: 1970 }, { code: "SAU", joinYear: 1969 },
-      { code: "SEN", joinYear: 1972 }, { code: "SLE", joinYear: 1972 },
-      { code: "SOM", joinYear: 1972 }, { code: "SDN", joinYear: 1972 },
-      { code: "SUR", joinYear: 1972 }, { code: "SYR", joinYear: 1969 },
-      { code: "TJK", joinYear: 1992 }, { code: "TGO", joinYear: 1972 },
-      { code: "TUN", joinYear: 1969 }, { code: "TUR", joinYear: 1969 },
-      { code: "TKM", joinYear: 1992 }, { code: "UGA", joinYear: 1972 },
-      { code: "ARE", joinYear: 1972 }, { code: "UZB", joinYear: 1996 },
-      { code: "YEM", joinYear: 1972 }
-    ]
-  },
-  {
-    id: "cptpp",
-    name: "CPTPP",
-    color: "#6B4E71",
-    members: [
-      { code: "AUS", joinYear: 2018 }, { code: "BRN", joinYear: 2018 },
-      { code: "CAN", joinYear: 2018 }, { code: "CHL", joinYear: 2018 },
-      { code: "JPN", joinYear: 2018 }, { code: "MYS", joinYear: 2018 },
-      { code: "MEX", joinYear: 2018 }, { code: "NZL", joinYear: 2018 },
-      { code: "PER", joinYear: 2018 }, { code: "SGP", joinYear: 2018 },
-      { code: "VNM", joinYear: 2018 }
-    ]
-  },
-  {
-    id: "rcep",
-    name: "RCEP",
-    color: "#FF6B6B",
-    members: [
-      { code: "AUS", joinYear: 2022 }, { code: "BRN", joinYear: 2022 },
-      { code: "KHM", joinYear: 2022 }, { code: "CHN", joinYear: 2022 },
-      { code: "IDN", joinYear: 2022 }, { code: "JPN", joinYear: 2022 },
-      { code: "KOR", joinYear: 2022 }, { code: "LAO", joinYear: 2022 },
-      { code: "MYS", joinYear: 2022 }, { code: "MMR", joinYear: 2022 },
-      { code: "NZL", joinYear: 2022 }, { code: "PHL", joinYear: 2022 },
-      { code: "SGP", joinYear: 2022 }, { code: "THA", joinYear: 2022 },
-      { code: "VNM", joinYear: 2022 }
-    ]
-  },
-  {
-    id: "usmca",
-    name: "USMCA",
-    color: "#4ECDC4",
-    members: [
-      { code: "USA", joinYear: 2020 }, { code: "MEX", joinYear: 2020 },
-      { code: "CAN", joinYear: 2020 }
-    ]
-  },
-  {
-    id: "oecd",
-    name: "OECD",
-    color: "#45B7D1",
-    members: [
-      { code: "AUS", joinYear: 1971 }, { code: "AUT", joinYear: 1961 },
-      { code: "BEL", joinYear: 1961 }, { code: "CAN", joinYear: 1961 },
-      { code: "CHL", joinYear: 2010 }, { code: "COL", joinYear: 2020 },
-      { code: "CRI", joinYear: 2021 }, { code: "CZE", joinYear: 1995 },
-      { code: "DNK", joinYear: 1961 }, { code: "EST", joinYear: 2010 },
-      { code: "FIN", joinYear: 1969 }, { code: "FRA", joinYear: 1961 },
-      { code: "DEU", joinYear: 1961 }, { code: "GRC", joinYear: 1961 },
-      { code: "HUN", joinYear: 1996 }, { code: "ISL", joinYear: 1961 },
-      { code: "IRL", joinYear: 1961 }, { code: "ISR", joinYear: 2010 },
-      { code: "ITA", joinYear: 1962 }, { code: "JPN", joinYear: 1964 },
-      { code: "KOR", joinYear: 1996 }, { code: "LVA", joinYear: 2016 },
-      { code: "LTU", joinYear: 2018 }, { code: "LUX", joinYear: 1961 },
-      { code: "MEX", joinYear: 1994 }, { code: "NLD", joinYear: 1961 },
-      { code: "NZL", joinYear: 1973 }, { code: "NOR", joinYear: 1961 },
-      { code: "POL", joinYear: 1996 }, { code: "PRT", joinYear: 1961 },
-      { code: "SVK", joinYear: 2000 }, { code: "SVN", joinYear: 2010 },
-      { code: "ESP", joinYear: 1961 }, { code: "SWE", joinYear: 1961 },
-      { code: "CHE", joinYear: 1961 }, { code: "TUR", joinYear: 1961 },
-      { code: "GBR", joinYear: 1961 }, { code: "USA", joinYear: 1961 }
-    ]
-  },
-  {
-    id: "g20",
-    name: "G20",
-    color: "#FF9F1C",
-    members: [
-      { code: "ARG", joinYear: 1999 }, { code: "AUS", joinYear: 1999 },
-      { code: "BRA", joinYear: 1999 }, { code: "CAN", joinYear: 1999 },
-      { code: "CHN", joinYear: 1999 }, { code: "FRA", joinYear: 1999 },
-      { code: "DEU", joinYear: 1999 }, { code: "IND", joinYear: 1999 },
-      { code: "IDN", joinYear: 1999 }, { code: "ITA", joinYear: 1999 },
-      { code: "JPN", joinYear: 1999 }, { code: "KOR", joinYear: 1999 },
-      { code: "MEX", joinYear: 1999 }, { code: "RUS", joinYear: 1999 },
-      { code: "SAU", joinYear: 1999 }, { code: "ZAF", joinYear: 1999 },
-      { code: "TUR", joinYear: 1999 }, { code: "GBR", joinYear: 1999 },
-      { code: "USA", joinYear: 1999 }, { code: "EU", joinYear: 1999 }
-    ]
+    members: ["AFG", "ALB", "DZA", "AZE", "BHR", "BGD", "BEN", "BRN", "BFA", "CMR", "TCD", "COM", "CIV", "DJI", "EGY", "GAB", "GMB", "GIN", "GNB", "GUY", "IDN", "IRN", "IRQ", "JOR", "KAZ", "KWT", "KGZ", "LBN", "LBY", "MYS", "MDV", "MLI", "MRT", "MAR", "MOZ", "NER", "NGA", "OMN", "PAK", "PSE", "QAT", "SAU", "SEN", "SLE", "SOM", "SDN", "SUR", "SYR", "TJK", "TGO", "TUN", "TUR", "TKM", "UGA", "ARE", "UZB", "YEM"]
   }
 ];
-
-export const findCountryAlliances = (countryCode: string, alliances: Alliance[]): Array<{ name: string; joinYear: number }> => {
-  return alliances.reduce((acc, alliance) => {
-    const membership = alliance.members.find(member => member.code === countryCode);
-    if (membership) {
-      acc.push({ name: alliance.name, joinYear: membership.joinYear });
-    }
-    return acc;
-  }, [] as Array<{ name: string; joinYear: number }>);
-};
