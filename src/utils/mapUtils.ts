@@ -13,43 +13,38 @@ export const initializeMap = (container: HTMLDivElement, token: string) => {
 };
 
 export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Alliance | null) => {
-  // Add the countries source if it doesn't exist
   if (!map.getSource('countries')) {
     map.addSource('countries', {
       type: 'vector',
-      url: 'mapbox://mapbox.country-boundaries-v1' // Use the Mapbox country boundaries tileset
+      url: 'mapbox://mapbox.country-boundaries-v1'
     });
   }
 
-  // Remove existing layers if they exist
   if (map.getLayer('country-fills')) map.removeLayer('country-fills');
   if (map.getLayer('country-borders')) map.removeLayer('country-borders');
 
-  // Add fill layer with a uniform color (e.g., all countries in white or any single color)
   map.addLayer({
     id: 'country-fills',
     type: 'fill',
     source: 'countries',
-    'source-layer': 'country_boundaries', // The layer name inside the tileset
+    'source-layer': 'country_boundaries',
     paint: {
-      'fill-color': '#FFFFFF',  // Set all countries to a uniform color
-      'fill-opacity': 0.7  // Adjust opacity as needed
+      'fill-color': '#FFFFFF',
+      'fill-opacity': 0.7
     }
   });
 
-  // Add border layer with a uniform color for borders
   map.addLayer({
     id: 'country-borders',
     type: 'line',
     source: 'countries',
     'source-layer': 'country_boundaries',
     paint: {
-      'line-color': '#CCCCCC',  // Set border color
-      'line-width': 0.5  // Adjust line width as needed
+      'line-color': '#CCCCCC',
+      'line-width': 0.5
     }
   });
 
-  // Move all symbol layers to the top
   const layers = map.getStyle().layers;
   const labelLayerIds = layers
     .filter(layer => layer.type === 'symbol')
@@ -59,7 +54,6 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     map.moveLayer(layerId);
   });
 
-  // Optionally, highlight the selected alliance if there is one
   if (selectedAlliance) {
     updateAllianceHighlight(map, selectedAlliance);
   }
