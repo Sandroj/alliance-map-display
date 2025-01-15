@@ -64,19 +64,11 @@ export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | 
 
   if (alliance) {
     const memberCodes = alliance.members.map(member => member.code);
-    const dialoguePartnerCodes = alliance.showDialoguePartners && alliance.dialoguePartners 
-      ? alliance.dialoguePartners.map(partner => partner.code)
-      : [];
-
-    const allCodes = [...memberCodes, ...dialoguePartnerCodes];
-    
     map.setPaintProperty('country-fills', 'fill-color', [
       'match',
       ['get', 'iso_3166_1_alpha_3'],
       memberCodes,
       alliance.color,
-      dialoguePartnerCodes,
-      '#A9A9A9', // Grey color for dialogue partners
       '#FFFFFF'
     ]);
     map.setPaintProperty('country-fills', 'fill-opacity', 0.7);
