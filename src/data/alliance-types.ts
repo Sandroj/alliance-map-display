@@ -10,6 +10,8 @@ export interface Alliance {
 }
 
 export type AllianceId = 
-  | "asean" | "aukus" | "bri" | "brics" | "celac" | "cptpp" 
-  | "eu" | "g7" | "g20" | "nato" | "oecd" | "oic" 
-  | "opec" | "quad" | "rcep" | "sco" | "usmca";
+  | "africacorps" | "africanunion" | "asean" | "atlanticpact"
+  | "aukus" | "bri" | "brics" | "celac" | "cptpp" 
+  | "eu" | "g7" | "g20" | "msp" | "nac" | "nato"
+  | "oecd" | "oic" | "opec" | "quad" | "rcep" 
+  | "sco" | "un" | "usmca";
