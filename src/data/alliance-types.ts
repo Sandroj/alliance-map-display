@@ -15,3 +15,5 @@ export type AllianceId =
   | "eu" | "g7" | "g20" | "msp" | "nac" | "nato"
   | "oecd" | "oic" | "opec" | "quad" | "rcep" 
   | "sco" | "un" | "usmca";
+
+export type AllianceCategory = "general" | "political" | "economic" | "military" | "commodities";

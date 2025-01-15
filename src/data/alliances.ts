@@ -1,14 +1,16 @@
 import { Alliance } from "./alliance-types";
-import { asiaPacificAlliances } from "./alliances/asia-pacific";
+import { generalAlliances } from "./alliances/general";
+import { politicalAlliances } from "./alliances/political";
 import { economicAlliances } from "./alliances/economic";
-import { globalAlliances } from "./alliances/global";
-import { regionalAlliances } from "./alliances/regional";
+import { militaryAlliances } from "./alliances/military";
+import { commoditiesAlliances } from "./alliances/commodities";
 
 export type { Alliance } from "./alliance-types";
 
 export const alliances: Alliance[] = [
-  ...asiaPacificAlliances,
+  ...generalAlliances,
+  ...politicalAlliances,
   ...economicAlliances,
-  ...globalAlliances,
-  ...regionalAlliances
+  ...militaryAlliances,
+  ...commoditiesAlliances
 ].sort((a, b) => a.name.localeCompare(b.name));
