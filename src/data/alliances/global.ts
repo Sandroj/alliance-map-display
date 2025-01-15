@@ -28,9 +28,9 @@ export const globalAlliances: Alliance[] = [
   },
   {
     id: "g20",
-    name: "G20",
+    name: "G20 + AU",
     color: "#800080",
-    description: "Group of Twenty - international forum for governments and central banks of 19 countries plus the EU",
+    description: "Group of Twenty plus African Union - international forum for governments and central banks",
     members: [
       { code: "ARG", joinYear: 1999 }, { code: "AUS", joinYear: 1999 },
       { code: "BRA", joinYear: 1999 }, { code: "CAN", joinYear: 1999 },
@@ -42,33 +42,26 @@ export const globalAlliances: Alliance[] = [
       { code: "SAU", joinYear: 1999 }, { code: "ZAF", joinYear: 1999 },
       { code: "TUR", joinYear: 1999 }, { code: "GBR", joinYear: 1999 },
       { code: "USA", joinYear: 1999 }, { code: "EU", joinYear: 1999 }
+    ],
+    dialoguePartners: [
+      { code: "DZA", since: 2024 }, { code: "AGO", since: 2024 },
+      { code: "BEN", since: 2024 }, { code: "BWA", since: 2024 },
+      { code: "BFA", since: 2024 }, { code: "BDI", since: 2024 },
+      { code: "CMR", since: 2024 }, { code: "CPV", since: 2024 }
+      // Add more African Union countries as needed
     ]
   },
   {
-    id: "oecd",
-    name: "OECD",
-    color: "#008080",
-    description: "Organisation for Economic Co-operation and Development - forum of countries committed to democracy and market economy",
+    id: "un",
+    name: "United Nations",
+    color: "#4682B4",
+    description: "International organization promoting international peace, security, and cooperation",
     members: [
-      { code: "AUS", joinYear: 1971 }, { code: "AUT", joinYear: 1961 },
-      { code: "BEL", joinYear: 1961 }, { code: "CAN", joinYear: 1961 },
-      { code: "CHL", joinYear: 2010 }, { code: "COL", joinYear: 2020 },
-      { code: "CRI", joinYear: 2021 }, { code: "CZE", joinYear: 1995 },
-      { code: "DNK", joinYear: 1961 }, { code: "EST", joinYear: 2010 },
-      { code: "FIN", joinYear: 1969 }, { code: "FRA", joinYear: 1961 },
-      { code: "DEU", joinYear: 1961 }, { code: "GRC", joinYear: 1961 },
-      { code: "HUN", joinYear: 1996 }, { code: "ISL", joinYear: 1961 },
-      { code: "IRL", joinYear: 1961 }, { code: "ISR", joinYear: 2010 },
-      { code: "ITA", joinYear: 1962 }, { code: "JPN", joinYear: 1964 },
-      { code: "KOR", joinYear: 1996 }, { code: "LVA", joinYear: 2016 },
-      { code: "LTU", joinYear: 2018 }, { code: "LUX", joinYear: 1961 },
-      { code: "MEX", joinYear: 1994 }, { code: "NLD", joinYear: 1961 },
-      { code: "NZL", joinYear: 1973 }, { code: "NOR", joinYear: 1961 },
-      { code: "POL", joinYear: 1996 }, { code: "PRT", joinYear: 1961 },
-      { code: "SVK", joinYear: 2000 }, { code: "SVN", joinYear: 2010 },
-      { code: "ESP", joinYear: 1961 }, { code: "SWE", joinYear: 1961 },
-      { code: "CHE", joinYear: 1961 }, { code: "TUR", joinYear: 1961 },
-      { code: "GBR", joinYear: 1961 }, { code: "USA", joinYear: 1961 }
+      // Add all UN member countries here
+      { code: "USA", joinYear: 1945 }, { code: "GBR", joinYear: 1945 },
+      { code: "FRA", joinYear: 1945 }, { code: "CHN", joinYear: 1945 },
+      { code: "RUS", joinYear: 1945 }
+      // ... Add more members
     ]
   }
 ];

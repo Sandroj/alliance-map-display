@@ -7,9 +7,15 @@ export interface Alliance {
     code: string;
     joinYear: number;
   }>;
+  dialoguePartners?: Array<{
+    code: string;
+    since: number;
+  }>;
+  showDialoguePartners?: boolean;
 }
 
 export type AllianceId = 
-  | "asean" | "aukus" | "bri" | "brics" | "celac" | "cptpp" 
-  | "eu" | "g7" | "g20" | "nato" | "oecd" | "oic" 
-  | "opec" | "quad" | "rcep" | "sco" | "usmca";
+  | "asean" | "aukus" | "atlanticpact" | "africancorps" | "africanunion"
+  | "bri" | "brics" | "celac" | "cptpp" | "eu" | "g7" | "g20" 
+  | "icc" | "msp" | "nato" | "nac" | "oecd" | "oic" 
+  | "opec" | "quad" | "rcep" | "sco" | "un" | "usmca";
