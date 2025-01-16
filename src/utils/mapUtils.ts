@@ -30,7 +30,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     'source-layer': 'country_boundaries',
     paint: {
       'fill-color': '#FFFFFF',
-      'fill-opacity': 0.7
+      'fill-opacity': 1
     }
   });
 
@@ -71,10 +71,10 @@ export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | 
       alliance.color,
       '#FFFFFF'
     ]);
-    map.setPaintProperty('country-fills', 'fill-opacity', 0.7);
+    map.setPaintProperty('country-fills', 'fill-opacity', 1);
   } else {
     map.setPaintProperty('country-fills', 'fill-color', '#FFFFFF');
-    map.setPaintProperty('country-fills', 'fill-opacity', 0.7);
+    map.setPaintProperty('country-fills', 'fill-opacity', 1);
   }
 };
 
