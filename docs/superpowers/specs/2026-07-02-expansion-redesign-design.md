@@ -44,6 +44,9 @@ export interface Alliance {
   mapNote?: string;           // optionele notitie in detailpaneel/legenda,
                               // bijv. "Members are unrecognized states and
                               // cannot be shown on the map"
+  wikipediaTitle?: string;    // exacte titel van het Engelstalige Wikipedia-
+                              // artikel, voor het organisatieprofiel; leeg =
+                              // profiel toont alleen de eigen beschrijving
 }
 ```
 
@@ -172,6 +175,26 @@ gesynchroniseerd (beide chips lichten op). Hover: subtiele lift
 (translateY -1px + schaduw). Selected: gevulde kleur + gloed (bestaand).
 Focus: zichtbare focus-ring. `aria-pressed` per chip.
 
+### Organisatieprofiel-modal (nieuw)
+
+Een gecentreerde glas-modal (max-breedte ~28rem, max-hoogte ~70vh, inhoud
+scrollbaar — bewust niet schermvullend) met per organisatie:
+
+- **Kop uit eigen data**: naam, categorie-iconen, ledenaantal, opgericht-
+  sinds (afgeleid via `getAllianceStats`), en `mapNote` indien aanwezig.
+- **Wikipedia-intro**: opgehaald via de REST-API
+  (`https://en.wikipedia.org/api/rest_v1/page/summary/<wikipediaTitle>`,
+  CORS-vrij, geen key) — thumbnail + extract, gevolgd door bronvermelding
+  "From Wikipedia" en een "Read more on Wikipedia →"-link (nieuw tabblad).
+  N.B.: de Wikipedia-pagina zelf iframen kan niet (X-Frame-Options), vandaar
+  deze API-aanpak.
+- **Gedrag**: opent via een subtiel ⓘ-knopje op elke chip (klik op de chip
+  zelf blijft selecteren; ⓘ is een eigen focusbaar element) én via klik op
+  een organisatie-rij in het land-detailpaneel. Sluit op Escape, klik-buiten
+  en kruisje. Laad-skeleton tijdens fetch; bij fetch-fout of ontbrekende
+  `wikipediaTitle` valt de modal terug op de eigen `description`. Responses
+  worden per sessie in-memory gecached (`src/utils/wikipedia.ts`).
+
 ### Detailpaneel (upgrade)
 
 - Echte slide-in/slide-out (transform-transitie; component blijft gemount
@@ -228,6 +251,8 @@ In `mapUtils.ts`:
 | `src/components/Header.tsx` | nieuw (vervangt TopBar.tsx) |
 | `src/components/AlliancePanel.tsx` | nieuw (vervangt AllianceSelector.tsx) |
 | `src/components/InfoOverlay.tsx` | nieuw (About/Legend/Sources) |
+| `src/components/OrgProfileModal.tsx` | nieuw (organisatieprofiel + Wikipedia-intro) |
+| `src/utils/wikipedia.ts` | nieuw (summary-fetch + sessie-cache) |
 | `src/components/AnimatedBackground.tsx` | nieuw |
 | `src/components/CountryDetailDrawer.tsx` | slide-animatie, status-labels, mapNote, Escape |
 | `src/components/WorldMap.tsx` | legenda-uitbreiding, lege-staat-hint |
@@ -246,12 +271,17 @@ In `mapUtils.ts`:
   informatief (wie zit er níet in) en bewust gekozen.
 - `prefers-reduced-motion` → achtergrond statisch, overige transities mogen
   blijven (subtiel en kort).
+- Wikipedia-fetch faalt of `wikipediaTitle` ontbreekt → profiel-modal toont
+  de eigen `description` en geen kapotte lege staat; de fout wordt niet
+  opnieuw geprobeerd binnen dezelfde sessie (cache slaat ook fouten op).
 
 ## 7. Research-werkwijze en verificatie
 
 Ledenlijsten worden per organisatie onderzocht door subagents met webresearch
 (officiële organisatiewebsites als primaire bron), die direct het
-`orgs/<id>.ts`-bestand opleveren in de vorm uit sectie 1. Twijfelgevallen
+`orgs/<id>.ts`-bestand opleveren in de vorm uit sectie 1 — inclusief de
+exacte Engelstalige Wikipedia-artikeltitel in `wikipediaTitle` (geverifieerd
+dat het artikel bestaat; leeg laten als er geen artikel is). Twijfelgevallen
 (SAFE-deelnemers, CEPS-landen, GGI-steunbetuigers, IOMed-ondertekenaars)
 worden onderzocht op de stand van 2026; waar bronnen elkaar tegenspreken wint
 de officiële bron en vermeldt de beschrijving de peildatum.
