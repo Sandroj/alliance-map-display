@@ -967,10 +967,10 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
               <span
                 className="w-2.5 h-2.5 rounded-sm"
                 style={{
-                  background: `repeating-linear-gradient(45deg, ${selectedAlliances[0].color}, ${selectedAlliances[0].color} 2px, ${selectedAlliances[1].color} 2px, ${selectedAlliances[1].color} 4px)`
+                  background: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,255,255,0.9) 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px)'
                 }}
               />
-              overlap
+              overlap tussen geselecteerde allianties
             </div>
           )}
         </div>
@@ -1072,7 +1072,7 @@ export default Index;
 
 - [ ] **Step 2: Type-check — nu moet alles kloppen**
 
-Run: `npx tsc --noEmit`
+Run: `npx tsc -p tsconfig.app.json --noEmit` (let op: plain `npx tsc --noEmit` checkt door de references-only root tsconfig.json niets en geeft altijd valse rust)
 Expected: geen output (geen errors) — als er nog errors zijn, controleer of Task 5-9 exact zijn overgenomen zoals gespecificeerd (met name prop-namen: `selectedIds`/`onToggle` op AllianceSelector, `selectedAlliances`/`onCountryClick` op WorldMap)
 
 - [ ] **Step 3: Commit**
@@ -1117,7 +1117,7 @@ Beweeg de muis over een land zonder te klikken. Controleer dat de rand van het l
 
 - [ ] **Step 7: Los eventuele bevindingen op**
 
-Als een van bovenstaande controles afwijkt van de beschrijving, noteer wat er misgaat, corrigeer het betreffende bestand uit Task 1-10, en herhaal de type-check (`npx tsc --noEmit`) voor dat bestand voordat je verder gaat.
+Als een van bovenstaande controles afwijkt van de beschrijving, noteer wat er misgaat, corrigeer het betreffende bestand uit Task 1-10, en herhaal de type-check (`npx tsc -p tsconfig.app.json --noEmit`) voor dat bestand voordat je verder gaat.
 
 - [ ] **Step 8: Laatste commit indien er correcties waren**
 

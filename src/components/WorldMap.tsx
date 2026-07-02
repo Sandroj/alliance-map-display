@@ -1,26 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Alliance, alliances } from '@/data/alliances';
+import { Alliance } from '@/data/alliances';
 import MapTokenInput from './MapTokenInput';
-import { initializeMap, setupCountriesLayer, updateAllianceHighlight, findCountryAlliances } from '@/utils/mapUtils';
+import { initializeMap, setupCountriesLayer, updateAllianceHighlights } from '@/utils/mapUtils';
 import { Alert, AlertDescription } from './ui/alert';
 import { useToast } from './ui/use-toast';
-import { Checkbox } from './ui/checkbox';
 
 interface WorldMapProps {
-  selectedAlliance: Alliance | null;
+  selectedAlliances: Alliance[];
+  onCountryClick: (code: string) => void;
 }
 
 const DEFAULT_MAPBOX_TOKEN = 'pk.eyJ1Ijoic2FuZHJvajg4IiwiYSI6ImNsaXhhbHdpYzA2ZHMzY285bGVnMmM2M28ifQ._Tg-8q66Ef4MRPvac9zUjA';
 
-const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
+const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const popup = useRef<mapboxgl.Popup | null>(null);
+  const hoveredCode = useRef<string | null>(null);
   const [mapboxToken, setMapboxToken] = useState<string>(DEFAULT_MAPBOX_TOKEN);
   const [error, setError] = useState<string | null>(null);
-  const [showAlliances, setShowAlliances] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -32,72 +31,60 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
 
       map.current.on('error', (e) => {
         console.error('Mapbox error:', e);
-        setError('There was an error loading the map. Please try refreshing the page.');
+        setError('Er ging iets mis bij het laden van de kaart. Ververs de pagina.');
         toast({
-          title: "Map Error",
-          description: "There was an error loading the map. Please try refreshing the page.",
+          title: "Kaart-fout",
+          description: "Er ging iets mis bij het laden van de kaart. Ververs de pagina.",
           variant: "destructive",
         });
       });
 
       map.current.on('load', () => {
         if (!map.current) return;
-        setupCountriesLayer(map.current, selectedAlliance);
+        setupCountriesLayer(map.current, selectedAlliances);
 
         map.current.on('mousemove', 'country-fills', (e) => {
-          if (e.features && e.features[0]?.properties) {
-            const countryCode = e.features[0].properties.iso_3166_1_alpha_3;
-            const countryName = e.features[0].properties.name_en;
-            
-            if (map.current) {
-              const canvas = map.current.getCanvas();
-              canvas.style.cursor = 'pointer';
-
-              if (showAlliances) {
-                const countryAlliances = findCountryAlliances(countryCode, alliances);
-                
-                if (countryAlliances.length > 0) {
-                  if (!popup.current) {
-                    popup.current = new mapboxgl.Popup({
-                      closeButton: false,
-                      className: 'bg-white rounded-md shadow-lg p-2'
-                    });
-                  }
-
-                  const alliancesList = countryAlliances
-                    .map(({ alliance, joinYear }) => `${alliance.name} (joined ${joinYear})`)
-                    .join('<br>');
-
-                  popup.current
-                    .setLngLat(e.lngLat)
-                    .setHTML(`
-                      <div class="font-semibold">${countryName}</div>
-                      <div class="text-sm text-gray-600">Member of:</div>
-                      <div class="text-sm">${alliancesList}</div>
-                    `)
-                    .addTo(map.current);
-                }
-              }
-            }
+          if (!map.current || !e.features?.[0]) return;
+          const code = e.features[0].properties?.iso_3166_1_alpha_3;
+          if (hoveredCode.current && hoveredCode.current !== code) {
+            map.current.setFeatureState(
+              { source: 'countries', sourceLayer: 'country_boundaries', id: hoveredCode.current },
+              { hover: false }
+            );
+          }
+          if (code) {
+            map.current.setFeatureState(
+              { source: 'countries', sourceLayer: 'country_boundaries', id: code },
+              { hover: true }
+            );
+            hoveredCode.current = code;
+            map.current.getCanvas().style.cursor = 'pointer';
           }
         });
 
         map.current.on('mouseleave', 'country-fills', () => {
-          if (map.current) {
-            const canvas = map.current.getCanvas();
-            canvas.style.cursor = '';
-            if (popup.current) {
-              popup.current.remove();
-            }
+          if (!map.current) return;
+          if (hoveredCode.current) {
+            map.current.setFeatureState(
+              { source: 'countries', sourceLayer: 'country_boundaries', id: hoveredCode.current },
+              { hover: false }
+            );
           }
+          hoveredCode.current = null;
+          map.current.getCanvas().style.cursor = '';
+        });
+
+        map.current.on('click', 'country-fills', (e) => {
+          const code = e.features?.[0]?.properties?.iso_3166_1_alpha_3;
+          if (code) onCountryClick(code);
         });
       });
     } catch (err) {
       console.error('Error initializing map:', err);
-      setError('Failed to initialize the map. Please check your internet connection and try again.');
+      setError('Kon de kaart niet initialiseren. Controleer je internetverbinding.');
       toast({
-        title: "Map Initialization Error",
-        description: "Failed to initialize the map. Please check your internet connection and try again.",
+        title: "Kaart-initialisatie mislukt",
+        description: "Kon de kaart niet initialiseren. Controleer je internetverbinding.",
         variant: "destructive",
       });
     }
@@ -105,38 +92,45 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliance }) => {
     return () => {
       map.current?.remove();
     };
-  }, [mapboxToken, showAlliances]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapboxToken]);
 
   useEffect(() => {
     if (!map.current || !map.current.isStyleLoaded()) return;
-    updateAllianceHighlight(map.current, selectedAlliance);
-  }, [selectedAlliance]);
+    updateAllianceHighlights(map.current, selectedAlliances);
+  }, [selectedAlliances]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id="show-alliances"
-          checked={showAlliances}
-          onCheckedChange={(checked) => setShowAlliances(checked as boolean)}
-        />
-        <label
-          htmlFor="show-alliances"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Show country alliance memberships on hover
-        </label>
-      </div>
+    <div className="relative w-full h-[calc(100vh-9rem)]">
+      {error && (
+        <Alert variant="destructive" className="absolute top-4 left-4 right-4 z-20">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+      {!mapboxToken && <MapTokenInput onTokenSet={setMapboxToken} />}
+      <div ref={mapContainer} className="absolute inset-0 rounded-xl overflow-hidden" />
 
-      <div className="relative w-full h-[calc(100vh-12rem)]">
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-        {!mapboxToken && <MapTokenInput onTokenSet={setMapboxToken} />}
-        <div ref={mapContainer} className="absolute inset-0 rounded-lg shadow-lg" />
-      </div>
+      {selectedAlliances.length > 0 && (
+        <div className="absolute bottom-4 left-4 p-3 text-xs text-white flex flex-col gap-1.5 z-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl">
+          {selectedAlliances.map((a) => (
+            <div key={a.id} className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: a.color }} />
+              {a.name}
+            </div>
+          ))}
+          {selectedAlliances.length > 1 && (
+            <div className="flex items-center gap-2 opacity-70 pt-1.5 mt-1 border-t border-white/10">
+              <span
+                className="w-2.5 h-2.5 rounded-sm"
+                style={{
+                  background: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,255,255,0.9) 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px)'
+                }}
+              />
+              overlap tussen geselecteerde allianties
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
