@@ -24,7 +24,7 @@ const Index = () => {
     : alliances;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-emerald-50 p-4">
       <div className="max-w-7xl mx-auto space-y-3">
         <TopBar
           alliances={alliances}

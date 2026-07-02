@@ -11,7 +11,7 @@ const countriesData: typeof worldCountries =
 // entiteiten — EU heeft daarom geen match in de dataset en krijgt hier
 // handmatig een entry.
 const EXTRA_ENTRIES: Record<string, { name: string; flag: string }> = {
-  EU: { name: 'Europese Unie', flag: '🇪🇺' },
+  EU: { name: 'European Union', flag: '🇪🇺' },
 };
 
 const usedCodes = new Set<string>();
@@ -31,7 +31,7 @@ usedCodes.forEach((code) => {
     console.warn(`Geen land gevonden voor code ${code}`);
     return;
   }
-  entries[code] = { name: match.translations?.nld?.common ?? match.name.common, flag: match.flag };
+  entries[code] = { name: match.name.common, flag: match.flag };
 });
 
 const lines = Object.entries(entries)

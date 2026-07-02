@@ -12,10 +12,10 @@ interface TopBarProps {
 }
 
 const CATEGORY_LABELS: Record<AllianceCategory, string> = {
-  militair: '⚔ militair',
-  handel: '💰 handel',
-  politiek: '🏛 politiek',
-  religieus: '☪ religieus',
+  militair: '⚔ military',
+  handel: '💰 trade',
+  politiek: '🏛 political',
+  religieus: '☪ religious',
 };
 
 const TopBar: React.FC<TopBarProps> = ({
@@ -45,21 +45,21 @@ const TopBar: React.FC<TopBarProps> = ({
   const hasResults = allianceResults.length > 0 || countryResults.length > 0;
 
   return (
-    <div className="flex flex-wrap items-center gap-3 px-4 py-3 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm rounded-xl relative">
-      <div className="font-heading font-bold text-lg text-gray-900">🌐 Wereldkaart</div>
+    <div className="flex flex-wrap items-center gap-3 px-4 py-3 bg-white/50 backdrop-blur-xl border border-white/60 shadow-sm rounded-xl relative">
+      <div className="font-heading font-bold text-lg text-gray-900">🌐 World Alliances</div>
 
       <div className="relative flex-1 min-w-[220px]">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Zoek land of alliantie..."
-          className="w-full px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 bg-white border border-gray-200 rounded-lg outline-none focus:border-gray-400"
+          placeholder="Search country or alliance..."
+          className="w-full px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 bg-white/80 border border-gray-200 rounded-lg outline-none focus:border-gray-400"
         />
         {query.trim() && (
-          <div className="absolute top-full left-0 right-0 mt-2 p-2 z-20 max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-xl">
+          <div className="absolute top-full left-0 right-0 mt-2 p-2 z-20 max-h-64 overflow-y-auto bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-xl">
             {!hasResults && (
-              <div className="text-xs text-gray-400 px-2 py-1">Geen resultaten</div>
+              <div className="text-xs text-gray-400 px-2 py-1">No results</div>
             )}
             {allianceResults.map((a) => (
               <button
@@ -67,7 +67,7 @@ const TopBar: React.FC<TopBarProps> = ({
                 onClick={() => { onSelectAlliance(a); setQuery(''); }}
                 className="block w-full text-left text-sm text-gray-900 px-2 py-1 rounded hover:bg-gray-100"
               >
-                {a.name} <span className="text-gray-400 text-xs">alliantie</span>
+                {a.name} <span className="text-gray-400 text-xs">alliance</span>
               </button>
             ))}
             {countryResults.map(([code, info]) => (

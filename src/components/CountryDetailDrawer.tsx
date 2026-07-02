@@ -21,11 +21,11 @@ const CountryDetailDrawer: React.FC<CountryDetailDrawerProps> = ({
   const memberships = findCountryAlliances(countryCode, alliances);
 
   return (
-    <div className="absolute top-4 right-4 bottom-4 w-56 p-4 flex flex-col gap-3 z-10 overflow-y-auto bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm rounded-xl">
+    <div className="absolute top-4 right-4 bottom-4 w-56 p-4 flex flex-col gap-3 z-10 overflow-y-auto bg-white/50 backdrop-blur-xl border border-white/60 shadow-sm rounded-xl">
       <button
         onClick={onClose}
         className="self-end text-gray-400 hover:text-gray-900 text-sm"
-        aria-label="Sluiten"
+        aria-label="Close"
       >
         ✕
       </button>
@@ -35,7 +35,7 @@ const CountryDetailDrawer: React.FC<CountryDetailDrawerProps> = ({
           {info?.name ?? countryCode}
         </div>
         <div className="text-xs text-gray-400 uppercase tracking-wide">
-          {memberships.length} {memberships.length === 1 ? 'alliantie' : 'allianties'}
+          {memberships.length} {memberships.length === 1 ? 'alliance' : 'alliances'}
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -53,7 +53,7 @@ const CountryDetailDrawer: React.FC<CountryDetailDrawerProps> = ({
           </div>
         ))}
         {memberships.length === 0 && (
-          <div className="text-xs text-gray-400">Geen lidmaatschappen bekend</div>
+          <div className="text-xs text-gray-400">No known memberships</div>
         )}
       </div>
     </div>

@@ -31,10 +31,10 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
 
       map.current.on('error', (e) => {
         console.error('Mapbox error:', e);
-        setError('Er ging iets mis bij het laden van de kaart. Ververs de pagina.');
+        setError('Something went wrong while loading the map. Please refresh the page.');
         toast({
-          title: "Kaart-fout",
-          description: "Er ging iets mis bij het laden van de kaart. Ververs de pagina.",
+          title: "Map error",
+          description: "Something went wrong while loading the map. Please refresh the page.",
           variant: "destructive",
         });
       });
@@ -81,10 +81,10 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
       });
     } catch (err) {
       console.error('Error initializing map:', err);
-      setError('Kon de kaart niet initialiseren. Controleer je internetverbinding.');
+      setError('Could not initialize the map. Please check your internet connection.');
       toast({
-        title: "Kaart-initialisatie mislukt",
-        description: "Kon de kaart niet initialiseren. Controleer je internetverbinding.",
+        title: "Map initialization failed",
+        description: "Could not initialize the map. Please check your internet connection.",
         variant: "destructive",
       });
     }
@@ -111,7 +111,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
       <div ref={mapContainer} className="absolute inset-0 rounded-xl overflow-hidden" />
 
       {selectedAlliances.length > 0 && (
-        <div className="absolute bottom-4 left-4 p-3 text-xs text-gray-700 flex flex-col gap-1.5 z-10 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm rounded-xl">
+        <div className="absolute bottom-4 left-4 p-3 text-xs text-gray-700 flex flex-col gap-1.5 z-10 bg-white/60 backdrop-blur-xl border border-white/70 shadow-sm rounded-xl">
           {selectedAlliances.map((a) => (
             <div key={a.id} className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: a.color }} />
@@ -126,7 +126,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
                   background: 'repeating-linear-gradient(45deg, rgba(0,0,0,0.6), rgba(0,0,0,0.6) 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)'
                 }}
               />
-              overlap tussen geselecteerde allianties
+              overlap between selected alliances
             </div>
           )}
         </div>

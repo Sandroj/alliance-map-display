@@ -20,7 +20,7 @@ export const initializeMap = (container: HTMLDivElement, token: string) => {
   mapboxgl.accessToken = token;
   return new mapboxgl.Map({
     container,
-    style: 'mapbox://styles/mapbox/light-v11',
+    style: 'mapbox://styles/mapbox/outdoors-v12',
     center: [0, 20],
     zoom: 1.5,
     projection: 'mercator'
