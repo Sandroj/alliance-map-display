@@ -3,6 +3,19 @@ import { Alliance } from '@/data/alliances';
 
 const BASE_FILL_COLOR = '#d5d5dc';
 
+// De mapbox.country-boundaries-v1 dataset bevat voor betwiste grenzen meerdere
+// overlappende polygonen — één per "worldview" (bijv. worldview "RU", "JP" én
+// "AR,CN,IN,MA,RS,TR,US" liggen alle drie over elkaar heen op Rusland). Zonder
+// filter renderen ze alle tegelijk, wat bij fill-opacity < 1 een zichtbaar
+// donkerdere tint geeft op precies die landen (gestapelde transparantie) —
+// terwijl landen zonder grensgeschil maar één polygoon (worldview "all")
+// hebben. Deze filter kiest per locatie steeds precies één polygoon.
+const WORLDVIEW_FILTER: mapboxgl.FilterSpecification = [
+  'any',
+  ['==', ['get', 'worldview'], 'all'],
+  ['in', 'US', ['get', 'worldview']]
+];
+
 export const initializeMap = (container: HTMLDivElement, token: string) => {
   mapboxgl.accessToken = token;
   return new mapboxgl.Map({
@@ -32,6 +45,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliances: Allian
     type: 'fill',
     source: 'countries',
     'source-layer': 'country_boundaries',
+    filter: WORLDVIEW_FILTER,
     paint: {
       'fill-color': BASE_FILL_COLOR,
       'fill-opacity': 0.55
@@ -43,7 +57,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliances: Allian
     type: 'fill',
     source: 'countries',
     'source-layer': 'country_boundaries',
-    filter: ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', []]],
+    filter: ['all', WORLDVIEW_FILTER, ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', []]]],
     paint: {
       'fill-opacity': 1
     }
@@ -54,6 +68,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliances: Allian
     type: 'line',
     source: 'countries',
     'source-layer': 'country_boundaries',
+    filter: WORLDVIEW_FILTER,
     paint: {
       'line-color': ['case', ['boolean', ['feature-state', 'hover'], false], '#1a1a2e', 'rgba(0,0,0,0.15)'],
       'line-width': ['case', ['boolean', ['feature-state', 'hover'], false], 1.5, 0.5]
@@ -120,7 +135,7 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
     map.setPaintProperty('country-fills', 'fill-color', BASE_FILL_COLOR);
     map.setPaintProperty('country-fills', 'fill-opacity', 0.55);
     if (map.getLayer('country-overlap')) {
-      map.setFilter('country-overlap', ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', []]]);
+      map.setFilter('country-overlap', ['all', WORLDVIEW_FILTER, ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', []]]]);
     }
     return;
   }
@@ -168,7 +183,7 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
   ]);
 
   if (map.getLayer('country-overlap')) {
-    map.setFilter('country-overlap', ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', overlapCodes]]);
+    map.setFilter('country-overlap', ['all', WORLDVIEW_FILTER, ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', overlapCodes]]]);
     if (overlapPatternMatch.length > 0) {
       map.setPaintProperty('country-overlap', 'fill-pattern', [
         'match',
