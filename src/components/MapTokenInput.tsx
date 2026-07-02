@@ -7,20 +7,20 @@ interface MapTokenInputProps {
 
 const MapTokenInput: React.FC<MapTokenInputProps> = ({ onTokenSet }) => {
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 rounded-lg p-4">
-      <p className="text-gray-600 mb-2">Please enter your Mapbox token to view the map:</p>
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/5 backdrop-blur-xl rounded-xl p-4 z-30">
+      <p className="text-white/70 mb-2">Voer je Mapbox-token in om de kaart te tonen:</p>
       <input
         type="text"
-        className="px-4 py-2 border rounded-md w-96 max-w-full"
-        placeholder="Enter your Mapbox token"
+        className="px-4 py-2 border border-white/20 bg-white/5 text-white rounded-md w-96 max-w-full placeholder-white/40"
+        placeholder="Voer je Mapbox-token in"
         onChange={(e) => {
           onTokenSet(e.target.value);
-          toast("Map token set successfully!");
+          toast("Mapbox-token ingesteld");
         }}
       />
-      <p className="text-sm text-gray-500 mt-2">
-        Get your token at{" "}
-        <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+      <p className="text-sm text-white/50 mt-2">
+        Token ophalen op{" "}
+        <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:underline">
           mapbox.com
         </a>
       </p>
