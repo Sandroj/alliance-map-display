@@ -46,7 +46,7 @@ const TopBar: React.FC<TopBarProps> = ({
 
   return (
     <div className="flex flex-wrap items-center gap-3 px-4 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl relative">
-      <div className="font-heading font-bold text-lg text-white">🌐 World Alliances</div>
+      <div className="font-heading font-bold text-lg text-white">🌐 Wereldkaart</div>
 
       <div className="relative flex-1 min-w-[220px]">
         <input

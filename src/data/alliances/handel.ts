@@ -68,7 +68,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "oecd",
     name: "OECD",
-    color: "hsl(28, 80%, 68%)",
+    color: "hsl(28, 40%, 45%)",
     description: "Organisation for Economic Co-operation and Development - forum of countries committed to democracy and market economy",
     category: "handel",
     members: [

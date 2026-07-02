@@ -76,22 +76,29 @@ const getOrCreateStripePattern = (map: mapboxgl.Map, colors: string[]): string =
   const patternId = `stripe-${colors.join('|')}`;
   if (map.hasImage(patternId)) return patternId;
 
-  const size = 32;
+  const size = 48;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext('2d');
   if (!ctx) return patternId;
 
-  const stripeColors = colors.slice(0, 2);
+  // Tot 4 kleuren tegelijk in het streeppatroon — bijv. de VS zit in NAVO,
+  // AUKUS én QUAD, dus een 2-kleuren-cap zou bij zo'n drievoudig overlap
+  // stilzwijgend een alliantie laten verdwijnen uit de streping. Bij 5+
+  // gelijktijdig geselecteerde overlappende allianties op één land (zeldzaam)
+  // worden de resterende kleuren om praktische leesbaarheidsredenen weggelaten.
+  const stripeColors = colors.slice(0, 4);
   const stripeWidth = 4;
   const period = stripeWidth * stripeColors.length;
 
   // Diagonaal streeppatroon via (x - y) mod period. Deze aanpak tegelt
-  // altijd naadloos zolang period de canvasgrootte deelt (32 / 8 = 4 hier) —
-  // in tegenstelling tot een geroteerd canvas, dat bij een 45°-hoek niet
-  // vanzelf periodiek is met de canvasgrootte en zichtbare naden geeft
-  // zodra Mapbox het patroon over een land groter dan één tegel herhaalt.
+  // altijd naadloos zolang period de canvasgrootte deelt — bij canvasgrootte
+  // 48 en stripeWidth 4 geldt dat voor 2, 3 én 4 kleuren (period 8/12/16,
+  // 48 is door alle drie deelbaar) — in tegenstelling tot een geroteerd
+  // canvas, dat bij een 45°-hoek niet vanzelf periodiek is met de
+  // canvasgrootte en zichtbare naden geeft zodra Mapbox het patroon over
+  // een land groter dan één tegel herhaalt.
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const diagonal = ((x - y) % period + period) % period;
