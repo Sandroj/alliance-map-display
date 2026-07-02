@@ -1,26 +1,59 @@
 import { useState } from 'react';
 import WorldMap from '@/components/WorldMap';
 import AllianceSelector from '@/components/AllianceSelector';
-import { alliances, Alliance } from '@/data/alliances';
+import TopBar from '@/components/TopBar';
+import CountryDetailDrawer from '@/components/CountryDetailDrawer';
+import { alliances, Alliance, AllianceCategory } from '@/data/alliances';
+import { countries } from '@/data/countries';
 
 const Index = () => {
-  const [selectedAlliance, setSelectedAlliance] = useState<Alliance | null>(null);
+  const [selectedAlliances, setSelectedAlliances] = useState<Alliance[]>([]);
+  const [activeCategory, setActiveCategory] = useState<AllianceCategory | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+
+  const toggleAlliance = (alliance: Alliance) => {
+    setSelectedAlliances((prev) =>
+      prev.some((a) => a.id === alliance.id)
+        ? prev.filter((a) => a.id !== alliance.id)
+        : [...prev, alliance]
+    );
+  };
+
+  const visibleAlliances = activeCategory
+    ? alliances.filter((a) => a.category === activeCategory)
+    : alliances;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">World Alliances Map</h1>
-        <p className="text-gray-600">
-          Explore international alliances and their member countries. Click on an alliance to highlight its members.
-        </p>
-        
-        <AllianceSelector
+    <div className="min-h-screen bg-gradient-to-br from-[#0f0a1f] to-[#1e0f42] p-4">
+      <div className="max-w-7xl mx-auto space-y-3">
+        <TopBar
           alliances={alliances}
-          selectedAlliance={selectedAlliance}
-          onSelect={setSelectedAlliance}
+          countries={countries}
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+          onSelectAlliance={toggleAlliance}
+          onSelectCountry={setSelectedCountry}
         />
-        
-        <WorldMap selectedAlliance={selectedAlliance} />
+
+        <AllianceSelector
+          alliances={visibleAlliances}
+          selectedIds={selectedAlliances.map((a) => a.id)}
+          onToggle={toggleAlliance}
+        />
+
+        <div className="relative">
+          <WorldMap
+            selectedAlliances={selectedAlliances}
+            onCountryClick={(code) =>
+              setSelectedCountry((prev) => (prev === code ? null : code))
+            }
+          />
+          <CountryDetailDrawer
+            countryCode={selectedCountry}
+            alliances={alliances}
+            onClose={() => setSelectedCountry(null)}
+          />
+        </div>
       </div>
     </div>
   );
