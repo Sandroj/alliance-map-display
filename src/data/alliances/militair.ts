@@ -51,7 +51,7 @@ export const militairAlliances: Alliance[] = [
   {
     id: "quad",
     name: "QUAD",
-    color: "hsl(35, 70%, 65%)",
+    color: "hsl(35, 70%, 48%)",
     description: "Strategic dialogue between Australia, India, Japan, and the United States focusing on maintaining a free Indo-Pacific region",
     category: "militair",
     members: [

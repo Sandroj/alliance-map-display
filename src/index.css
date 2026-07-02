@@ -99,7 +99,7 @@
 
   body {
     @apply text-foreground;
-    background-color: #0f0a1f;
+    background-color: #f7f7fa;
     font-family: 'Inter', system-ui, sans-serif;
   }
 }

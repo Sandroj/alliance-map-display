@@ -21,7 +21,7 @@ const AllianceSelector: React.FC<AllianceSelectorProps> = ({
   onToggle,
 }) => {
   return (
-    <div className="flex flex-wrap gap-2 p-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl">
+    <div className="flex flex-wrap gap-2 p-3 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm rounded-xl">
       <TooltipProvider>
         {alliances.map((alliance) => {
           const isSelected = selectedIds.includes(alliance.id);

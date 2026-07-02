@@ -111,7 +111,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
       <div ref={mapContainer} className="absolute inset-0 rounded-xl overflow-hidden" />
 
       {selectedAlliances.length > 0 && (
-        <div className="absolute bottom-4 left-4 p-3 text-xs text-white flex flex-col gap-1.5 z-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl">
+        <div className="absolute bottom-4 left-4 p-3 text-xs text-gray-700 flex flex-col gap-1.5 z-10 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm rounded-xl">
           {selectedAlliances.map((a) => (
             <div key={a.id} className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: a.color }} />
@@ -119,11 +119,11 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
             </div>
           ))}
           {selectedAlliances.length > 1 && (
-            <div className="flex items-center gap-2 opacity-70 pt-1.5 mt-1 border-t border-white/10">
+            <div className="flex items-center gap-2 opacity-70 pt-1.5 mt-1 border-t border-gray-200">
               <span
                 className="w-2.5 h-2.5 rounded-sm"
                 style={{
-                  background: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,255,255,0.9) 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px)'
+                  background: 'repeating-linear-gradient(45deg, rgba(0,0,0,0.6), rgba(0,0,0,0.6) 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)'
                 }}
               />
               overlap tussen geselecteerde allianties

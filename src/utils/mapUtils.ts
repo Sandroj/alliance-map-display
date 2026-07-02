@@ -1,13 +1,13 @@
 import mapboxgl from 'mapbox-gl';
 import { Alliance } from '@/data/alliances';
 
-const BASE_FILL_COLOR = '#241a3d';
+const BASE_FILL_COLOR = '#d5d5dc';
 
 export const initializeMap = (container: HTMLDivElement, token: string) => {
   mapboxgl.accessToken = token;
   return new mapboxgl.Map({
     container,
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/light-v11',
     center: [0, 20],
     zoom: 1.5,
     projection: 'mercator'
@@ -55,7 +55,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliances: Allian
     source: 'countries',
     'source-layer': 'country_boundaries',
     paint: {
-      'line-color': ['case', ['boolean', ['feature-state', 'hover'], false], '#ffffff', 'rgba(255,255,255,0.15)'],
+      'line-color': ['case', ['boolean', ['feature-state', 'hover'], false], '#1a1a2e', 'rgba(0,0,0,0.15)'],
       'line-width': ['case', ['boolean', ['feature-state', 'hover'], false], 1.5, 0.5]
     }
   });

@@ -40,7 +40,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "asean",
     name: "ASEAN",
-    color: "hsl(290, 70%, 62%)",
+    color: "hsl(290, 70%, 48%)",
     description: "Association of Southeast Asian Nations - promotes economic growth, social progress, and cultural development in Southeast Asia",
     category: "politiek",
     members: [
@@ -79,7 +79,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "eu",
     name: "European Union",
-    color: "hsl(275, 65%, 68%)",
+    color: "hsl(275, 65%, 50%)",
     description: "Political and economic union of 27 European member states",
     category: "politiek",
     members: [
@@ -115,7 +115,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "g20",
     name: "G20",
-    color: "hsl(260, 55%, 70%)",
+    color: "hsl(260, 55%, 50%)",
     description: "Group of Twenty - international forum for governments and central banks of 19 countries plus the EU",
     category: "politiek",
     members: [

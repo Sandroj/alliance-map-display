@@ -16,7 +16,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "bri",
     name: "Belt and Road Initiative",
-    color: "hsl(58, 60%, 62%)",
+    color: "hsl(58, 60%, 45%)",
     description: "China's global infrastructure development strategy to invest in nearly 70 countries and organizations",
     category: "handel",
     members: [
@@ -96,7 +96,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "opec",
     name: "OPEC",
-    color: "hsl(42, 85%, 58%)",
+    color: "hsl(42, 85%, 48%)",
     description: "Organization of Petroleum Exporting Countries - coordinates petroleum policies among member countries",
     category: "handel",
     members: [
@@ -112,7 +112,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "rcep",
     name: "RCEP",
-    color: "hsl(34, 50%, 75%)",
+    color: "hsl(34, 50%, 50%)",
     description: "Regional Comprehensive Economic Partnership - world's largest trade bloc, promoting economic integration in the Asia-Pacific region",
     category: "handel",
     members: [
