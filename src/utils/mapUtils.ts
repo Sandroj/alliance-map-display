@@ -137,8 +137,10 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
   const soloMatch: string[] = [];
   const overlapCodes: string[] = [];
   const overlapPatternMatch: string[] = [];
+  const opacityMatch: (string | number)[] = [];
 
   codeToAlliances.forEach((memberAlliances, code) => {
+    opacityMatch.push(code, 1);
     if (memberAlliances.length === 1) {
       soloMatch.push(code, memberAlliances[0].color);
     } else {
@@ -154,7 +156,16 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
     ...soloMatch,
     BASE_FILL_COLOR
   ]);
-  map.setPaintProperty('country-fills', 'fill-opacity', 1);
+  // Alleen landen die daadwerkelijk lid zijn van een geselecteerde alliantie
+  // worden vol zichtbaar; de rest blijft gedimd (0.55), zodat het contrast
+  // met de "niets geselecteerd"-staat behouden blijft in plaats van dat de
+  // hele kaart in één keer ondoorzichtig wordt zodra er iets geselecteerd is.
+  map.setPaintProperty('country-fills', 'fill-opacity', [
+    'match',
+    ['get', 'iso_3166_1_alpha_3'],
+    ...opacityMatch,
+    0.55
+  ]);
 
   if (map.getLayer('country-overlap')) {
     map.setFilter('country-overlap', ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', overlapCodes]]);
