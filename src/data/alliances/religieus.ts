@@ -4,7 +4,7 @@ export const religieusAlliances: Alliance[] = [
   {
     id: "oic",
     name: "Organization of Islamic Cooperation",
-    color: "#8B4513",
+    color: "hsl(165, 75%, 48%)",
     description: "Second-largest intergovernmental organization representing the Muslim world's collective voice",
     category: "religieus",
     members: [

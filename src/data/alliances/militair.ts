@@ -4,7 +4,7 @@ export const militairAlliances: Alliance[] = [
   {
     id: "africacorps",
     name: "Africa Corps",
-    color: "#8B4513",
+    color: "hsl(335, 75%, 50%)",
     description: "Russian military organization active in several African countries",
     category: "militair",
     members: [
@@ -15,7 +15,7 @@ export const militairAlliances: Alliance[] = [
   {
     id: "aukus",
     name: "AUKUS",
-    color: "#483D8B",
+    color: "hsl(0, 85%, 58%)",
     description: "Trilateral security pact between Australia, the UK, and the US focusing on military capability and technology sharing",
     category: "militair",
     members: [
@@ -26,7 +26,7 @@ export const militairAlliances: Alliance[] = [
   {
     id: "nato",
     name: "NATO",
-    color: "#00A0DC",
+    color: "hsl(15, 90%, 50%)",
     description: "Military alliance between North American and European countries",
     category: "militair",
     members: [
@@ -51,7 +51,7 @@ export const militairAlliances: Alliance[] = [
   {
     id: "quad",
     name: "QUAD",
-    color: "#20B2AA",
+    color: "hsl(35, 70%, 65%)",
     description: "Strategic dialogue between Australia, India, Japan, and the United States focusing on maintaining a free Indo-Pacific region",
     category: "militair",
     members: [

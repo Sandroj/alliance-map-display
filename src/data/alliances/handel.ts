@@ -4,7 +4,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "atlanticpact",
     name: "Atlantic Cooperation Pact",
-    color: "#4682B4",
+    color: "hsl(8, 85%, 48%)",
     description: "Strategic partnership between North Atlantic nations",
     category: "handel",
     members: [
@@ -16,7 +16,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "bri",
     name: "Belt and Road Initiative",
-    color: "#CD853F",
+    color: "hsl(58, 60%, 62%)",
     description: "China's global infrastructure development strategy to invest in nearly 70 countries and organizations",
     category: "handel",
     members: [
@@ -39,7 +39,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "brics",
     name: "BRICS",
-    color: "#9932CC",
+    color: "hsl(18, 90%, 55%)",
     description: "Major emerging economies group comprising Brazil, Russia, India, China, South Africa, and new members",
     category: "handel",
     members: [
@@ -53,7 +53,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "cptpp",
     name: "CPTPP",
-    color: "#6B4423",
+    color: "hsl(50, 70%, 45%)",
     description: "Comprehensive and Progressive Agreement for Trans-Pacific Partnership - promotes economic integration and free trade in the Pacific region",
     category: "handel",
     members: [
@@ -68,7 +68,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "oecd",
     name: "OECD",
-    color: "#008080",
+    color: "hsl(28, 80%, 68%)",
     description: "Organisation for Economic Co-operation and Development - forum of countries committed to democracy and market economy",
     category: "handel",
     members: [
@@ -96,7 +96,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "opec",
     name: "OPEC",
-    color: "#006400",
+    color: "hsl(42, 85%, 58%)",
     description: "Organization of Petroleum Exporting Countries - coordinates petroleum policies among member countries",
     category: "handel",
     members: [
@@ -112,7 +112,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "rcep",
     name: "RCEP",
-    color: "#4B0082",
+    color: "hsl(34, 50%, 75%)",
     description: "Regional Comprehensive Economic Partnership - world's largest trade bloc, promoting economic integration in the Asia-Pacific region",
     category: "handel",
     members: [
@@ -129,7 +129,7 @@ export const handelAlliances: Alliance[] = [
   {
     id: "usmca",
     name: "USMCA",
-    color: "#2E8B57",
+    color: "hsl(36, 95%, 40%)",
     description: "United States-Mexico-Canada Agreement - North American free trade agreement replacing NAFTA",
     category: "handel",
     members: [

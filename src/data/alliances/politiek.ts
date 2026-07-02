@@ -4,7 +4,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "africanunion",
     name: "African Union",
-    color: "#228B22",
+    color: "hsl(200, 75%, 52%)",
     description: "Continental union consisting of 55 member states in Africa",
     category: "politiek",
     members: [
@@ -40,7 +40,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "asean",
     name: "ASEAN",
-    color: "#FF4500",
+    color: "hsl(290, 70%, 62%)",
     description: "Association of Southeast Asian Nations - promotes economic growth, social progress, and cultural development in Southeast Asia",
     category: "politiek",
     members: [
@@ -54,7 +54,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "celac",
     name: "CELAC",
-    color: "#FF69B4",
+    color: "hsl(215, 80%, 58%)",
     description: "Community of Latin American and Caribbean States - regional bloc promoting integration and sustainable development",
     category: "politiek",
     members: [
@@ -79,7 +79,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "eu",
     name: "European Union",
-    color: "#003399",
+    color: "hsl(275, 65%, 68%)",
     description: "Political and economic union of 27 European member states",
     category: "politiek",
     members: [
@@ -102,7 +102,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "g7",
     name: "G7",
-    color: "#4169E1",
+    color: "hsl(230, 85%, 48%)",
     description: "Group of Seven - forum of world's most advanced economies discussing global economic and political issues",
     category: "politiek",
     members: [
@@ -115,7 +115,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "g20",
     name: "G20",
-    color: "#800080",
+    color: "hsl(260, 55%, 70%)",
     description: "Group of Twenty - international forum for governments and central banks of 19 countries plus the EU",
     category: "politiek",
     members: [
@@ -134,7 +134,7 @@ export const politiekAlliances: Alliance[] = [
   {
     id: "sco",
     name: "Shanghai Cooperation",
-    color: "#8B0000",
+    color: "hsl(245, 90%, 42%)",
     description: "Eurasian political, economic, and security alliance focusing on political, economic, and security issues",
     category: "politiek",
     members: [
