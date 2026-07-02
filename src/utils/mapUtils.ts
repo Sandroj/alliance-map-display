@@ -1,25 +1,29 @@
 import mapboxgl from 'mapbox-gl';
 import { Alliance } from '@/data/alliances';
 
+const BASE_FILL_COLOR = '#241a3d';
+
 export const initializeMap = (container: HTMLDivElement, token: string) => {
   mapboxgl.accessToken = token;
   return new mapboxgl.Map({
     container,
-    style: 'mapbox://styles/mapbox/outdoors-v12',
+    style: 'mapbox://styles/mapbox/dark-v11',
     center: [0, 20],
     zoom: 1.5,
     projection: 'mercator'
   });
 };
 
-export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Alliance | null) => {
+export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliances: Alliance[]) => {
   if (!map.getSource('countries')) {
     map.addSource('countries', {
       type: 'vector',
-      url: 'mapbox://mapbox.country-boundaries-v1'
+      url: 'mapbox://mapbox.country-boundaries-v1',
+      promoteId: 'iso_3166_1_alpha_3'
     });
   }
 
+  if (map.getLayer('country-overlap')) map.removeLayer('country-overlap');
   if (map.getLayer('country-fills')) map.removeLayer('country-fills');
   if (map.getLayer('country-borders')) map.removeLayer('country-borders');
 
@@ -29,7 +33,18 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     source: 'countries',
     'source-layer': 'country_boundaries',
     paint: {
-      'fill-color': '#FFFFFF',
+      'fill-color': BASE_FILL_COLOR,
+      'fill-opacity': 0.55
+    }
+  });
+
+  map.addLayer({
+    id: 'country-overlap',
+    type: 'fill',
+    source: 'countries',
+    'source-layer': 'country_boundaries',
+    filter: ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', []]],
+    paint: {
       'fill-opacity': 1
     }
   });
@@ -40,47 +55,116 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliance: Allianc
     source: 'countries',
     'source-layer': 'country_boundaries',
     paint: {
-      'line-color': '#CCCCCC',
-      'line-width': 0.5
+      'line-color': ['case', ['boolean', ['feature-state', 'hover'], false], '#ffffff', 'rgba(255,255,255,0.15)'],
+      'line-width': ['case', ['boolean', ['feature-state', 'hover'], false], 1.5, 0.5]
     }
   });
 
   const layers = map.getStyle().layers;
   const labelLayerIds = layers
-    .filter(layer => layer.type === 'symbol')
-    .map(layer => layer.id);
+    .filter((layer) => layer.type === 'symbol')
+    .map((layer) => layer.id);
 
-  labelLayerIds.forEach(layerId => {
+  labelLayerIds.forEach((layerId) => {
     map.moveLayer(layerId);
   });
 
-  if (selectedAlliance) {
-    updateAllianceHighlight(map, selectedAlliance);
-  }
+  updateAllianceHighlights(map, selectedAlliances);
 };
 
-export const updateAllianceHighlight = (map: mapboxgl.Map, alliance: Alliance | null) => {
+const getOrCreateStripePattern = (map: mapboxgl.Map, colors: string[]): string => {
+  const patternId = `stripe-${colors.join('|')}`;
+  if (map.hasImage(patternId)) return patternId;
+
+  const size = 32;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return patternId;
+
+  const stripeColors = colors.slice(0, 2);
+  const stripeWidth = 4;
+  const period = stripeWidth * stripeColors.length;
+
+  // Diagonaal streeppatroon via (x - y) mod period. Deze aanpak tegelt
+  // altijd naadloos zolang period de canvasgrootte deelt (32 / 8 = 4 hier) —
+  // in tegenstelling tot een geroteerd canvas, dat bij een 45°-hoek niet
+  // vanzelf periodiek is met de canvasgrootte en zichtbare naden geeft
+  // zodra Mapbox het patroon over een land groter dan één tegel herhaalt.
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const diagonal = ((x - y) % period + period) % period;
+      const colorIndex = Math.floor(diagonal / stripeWidth);
+      ctx.fillStyle = stripeColors[colorIndex];
+      ctx.fillRect(x, y, 1, 1);
+    }
+  }
+
+  const imageData = ctx.getImageData(0, 0, size, size);
+  map.addImage(patternId, imageData);
+  return patternId;
+};
+
+export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[]) => {
   if (!map.getLayer('country-fills')) return;
 
-  if (alliance) {
-    const memberCodes = alliance.members.map(member => member.code);
-    map.setPaintProperty('country-fills', 'fill-color', [
-      'match',
-      ['get', 'iso_3166_1_alpha_3'],
-      memberCodes,
-      alliance.color,
-      '#FFFFFF'
-    ]);
-    map.setPaintProperty('country-fills', 'fill-opacity', 1);
-  } else {
-    map.setPaintProperty('country-fills', 'fill-color', '#FFFFFF');
-    map.setPaintProperty('country-fills', 'fill-opacity', 1);
+  if (alliances.length === 0) {
+    map.setPaintProperty('country-fills', 'fill-color', BASE_FILL_COLOR);
+    map.setPaintProperty('country-fills', 'fill-opacity', 0.55);
+    if (map.getLayer('country-overlap')) {
+      map.setFilter('country-overlap', ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', []]]);
+    }
+    return;
+  }
+
+  const codeToAlliances = new Map<string, Alliance[]>();
+  alliances.forEach((alliance) => {
+    alliance.members.forEach((member) => {
+      const list = codeToAlliances.get(member.code) ?? [];
+      list.push(alliance);
+      codeToAlliances.set(member.code, list);
+    });
+  });
+
+  const soloMatch: string[] = [];
+  const overlapCodes: string[] = [];
+  const overlapPatternMatch: string[] = [];
+
+  codeToAlliances.forEach((memberAlliances, code) => {
+    if (memberAlliances.length === 1) {
+      soloMatch.push(code, memberAlliances[0].color);
+    } else {
+      overlapCodes.push(code);
+      const patternId = getOrCreateStripePattern(map, memberAlliances.map((a) => a.color));
+      overlapPatternMatch.push(code, patternId);
+    }
+  });
+
+  map.setPaintProperty('country-fills', 'fill-color', [
+    'match',
+    ['get', 'iso_3166_1_alpha_3'],
+    ...soloMatch,
+    BASE_FILL_COLOR
+  ]);
+  map.setPaintProperty('country-fills', 'fill-opacity', 1);
+
+  if (map.getLayer('country-overlap')) {
+    map.setFilter('country-overlap', ['in', ['get', 'iso_3166_1_alpha_3'], ['literal', overlapCodes]]);
+    if (overlapPatternMatch.length > 0) {
+      map.setPaintProperty('country-overlap', 'fill-pattern', [
+        'match',
+        ['get', 'iso_3166_1_alpha_3'],
+        ...overlapPatternMatch,
+        ''
+      ]);
+    }
   }
 };
 
-export const findCountryAlliances = (countryCode: string, alliances: Alliance[]): Array<{alliance: Alliance, joinYear: number}> => {
+export const findCountryAlliances = (countryCode: string, alliances: Alliance[]): Array<{ alliance: Alliance; joinYear: number }> => {
   return alliances.reduce((acc, alliance) => {
-    const membership = alliance.members.find(member => member.code === countryCode);
+    const membership = alliance.members.find((member) => member.code === countryCode);
     if (membership) {
       acc.push({
         alliance,
@@ -88,5 +172,5 @@ export const findCountryAlliances = (countryCode: string, alliances: Alliance[])
       });
     }
     return acc;
-  }, [] as Array<{alliance: Alliance, joinYear: number}>);
+  }, [] as Array<{ alliance: Alliance; joinYear: number }>);
 };

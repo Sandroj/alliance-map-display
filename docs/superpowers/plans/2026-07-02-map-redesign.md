@@ -715,7 +715,7 @@ export const setupCountriesLayer = (map: mapboxgl.Map, selectedAlliances: Allian
 };
 
 const getOrCreateStripePattern = (map: mapboxgl.Map, colors: string[]): string => {
-  const patternId = `stripe-${colors.map((c) => c.replace(/[^a-zA-Z0-9]/g, '')).join('-')}`;
+  const patternId = `stripe-${colors.join('|')}`;
   if (map.hasImage(patternId)) return patternId;
 
   const size = 32;
@@ -726,16 +726,21 @@ const getOrCreateStripePattern = (map: mapboxgl.Map, colors: string[]): string =
   if (!ctx) return patternId;
 
   const stripeColors = colors.slice(0, 2);
-  const stripeWidth = size / (stripeColors.length * 2);
-  for (let i = -size; i < size * 2; i += stripeWidth) {
-    const colorIndex = Math.floor((i + size) / stripeWidth) % stripeColors.length;
-    ctx.fillStyle = stripeColors[colorIndex];
-    ctx.save();
-    ctx.translate(size / 2, size / 2);
-    ctx.rotate(Math.PI / 4);
-    ctx.translate(-size / 2, -size / 2);
-    ctx.fillRect(i, -size, stripeWidth, size * 3);
-    ctx.restore();
+  const stripeWidth = 4;
+  const period = stripeWidth * stripeColors.length;
+
+  // Diagonaal streeppatroon via (x - y) mod period. Deze aanpak tegelt
+  // altijd naadloos zolang period de canvasgrootte deelt (32 / 8 = 4 hier) —
+  // in tegenstelling tot een geroteerd canvas, dat bij een 45°-hoek niet
+  // vanzelf periodiek is met de canvasgrootte en zichtbare naden geeft
+  // zodra Mapbox het patroon over een land groter dan één tegel herhaalt.
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const diagonal = ((x - y) % period + period) % period;
+      const colorIndex = Math.floor(diagonal / stripeWidth);
+      ctx.fillStyle = stripeColors[colorIndex];
+      ctx.fillRect(x, y, 1, 1);
+    }
   }
 
   const imageData = ctx.getImageData(0, 0, size, size);
