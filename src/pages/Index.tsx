@@ -20,7 +20,7 @@ const Index = () => {
   };
 
   const visibleAlliances = activeCategory
-    ? alliances.filter((a) => a.category === activeCategory)
+    ? alliances.filter((a) => a.categories.includes(activeCategory))
     : alliances;
 
   return (
