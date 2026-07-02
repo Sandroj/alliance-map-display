@@ -1,8 +1,11 @@
+export type AllianceCategory = "militair" | "handel" | "politiek" | "religieus";
+
 export interface Alliance {
   id: string;
   name: string;
   color: string;
   description: string;
+  category: AllianceCategory;
   members: Array<{
     code: string;
     joinYear: number;
