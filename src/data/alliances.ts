@@ -7,16 +7,22 @@ import { aukus } from "./alliances/orgs/aukus";
 import { bri } from "./alliances/orgs/bri";
 import { brics } from "./alliances/orgs/brics";
 import { celac } from "./alliances/orgs/celac";
+import { ceps } from "./alliances/orgs/ceps";
 import { cptpp } from "./alliances/orgs/cptpp";
+import { csto } from "./alliances/orgs/csto";
 import { eu } from "./alliances/orgs/eu";
 import { g7 } from "./alliances/orgs/g7";
 import { g20 } from "./alliances/orgs/g20";
+import { iaea } from "./alliances/orgs/iaea";
+import { icepact } from "./alliances/orgs/icepact";
+import { msp } from "./alliances/orgs/msp";
 import { nato } from "./alliances/orgs/nato";
 import { oecd } from "./alliances/orgs/oecd";
 import { oic } from "./alliances/orgs/oic";
 import { opec } from "./alliances/orgs/opec";
 import { quad } from "./alliances/orgs/quad";
 import { rcep } from "./alliances/orgs/rcep";
+import { safe } from "./alliances/orgs/safe";
 import { sco } from "./alliances/orgs/sco";
 import { usmca } from "./alliances/orgs/usmca";
 
@@ -24,5 +30,6 @@ export type { Alliance, AllianceCategory, AllianceMember, MemberStatus } from ".
 
 export const alliances: Alliance[] = [
   africacorps, africanunion, asean, atlanticpact, aukus, bri, brics, celac,
-  cptpp, eu, g7, g20, nato, oecd, oic, opec, quad, rcep, sco, usmca,
+  ceps, cptpp, csto, eu, g7, g20, iaea, icepact, msp, nato, oecd, oic, opec,
+  quad, rcep, safe, sco, usmca,
 ].sort((a, b) => a.name.localeCompare(b.name));
