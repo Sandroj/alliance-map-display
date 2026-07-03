@@ -109,6 +109,11 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
       )}
       {!mapboxToken && <MapTokenInput onTokenSet={setMapboxToken} />}
       <div ref={mapContainer} className="absolute inset-0 rounded-xl overflow-hidden" />
+      {selectedAlliances.length === 0 && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 px-4 py-2 text-xs text-gray-600 bg-white/60 backdrop-blur-xl border border-white/70 rounded-full shadow-sm pointer-events-none">
+          Select an alliance to explore the map
+        </div>
+      )}
 
       {selectedAlliances.length > 0 && (
         <div className="absolute bottom-4 left-4 p-3 text-xs text-gray-700 flex flex-col gap-1.5 z-10 bg-white/60 backdrop-blur-xl border border-white/70 shadow-sm rounded-xl">
@@ -118,6 +123,12 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
               {a.name}
             </div>
           ))}
+          {selectedAlliances.some((a) => a.members.some((m) => m.status)) && (
+            <div className="flex items-center gap-2 opacity-70">
+              <span className="w-2.5 h-2.5 rounded-sm bg-gray-400/50" />
+              faded = observer / partner
+            </div>
+          )}
           {selectedAlliances.length > 1 && (
             <div className="flex items-center gap-2 opacity-70 pt-1.5 mt-1 border-t border-gray-200">
               <span
