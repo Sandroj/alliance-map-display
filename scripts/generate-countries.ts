@@ -7,11 +7,14 @@ import { alliances } from '../src/data/alliances';
 const countriesData: typeof worldCountries =
   (worldCountries as unknown as { default?: typeof worldCountries }).default ?? worldCountries;
 
-// world-countries modelleert alleen soevereine staten, geen supranationale
-// entiteiten — EU heeft daarom geen match in de dataset en krijgt hier
-// handmatig een entry.
+// world-countries modelleert alleen soevereine staten; supranationale
+// entiteiten en niet-erkende staten krijgen hier handmatig een entry.
 const EXTRA_ENTRIES: Record<string, { name: string; flag: string }> = {
   EU: { name: 'European Union', flag: '🇪🇺' },
+  AU: { name: 'African Union', flag: '🌍' },
+  XAB: { name: 'Abkhazia', flag: '🏳️' },
+  XSO: { name: 'South Ossetia', flag: '🏳️' },
+  XTR: { name: 'Transnistria', flag: '🏳️' },
 };
 
 const usedCodes = new Set<string>();
