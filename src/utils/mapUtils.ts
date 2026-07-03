@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import { Alliance } from '@/data/alliances';
+import { Alliance, MemberStatus } from '@/data/alliances';
 
 const BASE_FILL_COLOR = '#d5d5dc';
 
@@ -140,12 +140,13 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
     return;
   }
 
-  const codeToAlliances = new Map<string, Alliance[]>();
+  type Membership = { alliance: Alliance; status?: MemberStatus };
+  const codeToMemberships = new Map<string, Membership[]>();
   alliances.forEach((alliance) => {
     alliance.members.forEach((member) => {
-      const list = codeToAlliances.get(member.code) ?? [];
-      list.push(alliance);
-      codeToAlliances.set(member.code, list);
+      const list = codeToMemberships.get(member.code) ?? [];
+      list.push({ alliance, status: member.status });
+      codeToMemberships.set(member.code, list);
     });
   });
 
@@ -154,13 +155,17 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
   const overlapPatternMatch: string[] = [];
   const opacityMatch: (string | number)[] = [];
 
-  codeToAlliances.forEach((memberAlliances, code) => {
-    opacityMatch.push(code, 1);
-    if (memberAlliances.length === 1) {
-      soloMatch.push(code, memberAlliances[0].color);
+  codeToMemberships.forEach((memberships, code) => {
+    // Volwaardig lid van minstens één geselecteerde organisatie → vol zichtbaar;
+    // uitsluitend observer/dialogue/partner-statussen → vervaagd (0.45).
+    const isFullSomewhere = memberships.some((m) => !m.status);
+    opacityMatch.push(code, isFullSomewhere ? 1 : 0.45);
+
+    if (memberships.length === 1) {
+      soloMatch.push(code, memberships[0].alliance.color);
     } else {
       overlapCodes.push(code);
-      const patternId = getOrCreateStripePattern(map, memberAlliances.map((a) => a.color));
+      const patternId = getOrCreateStripePattern(map, memberships.map((m) => m.alliance.color));
       overlapPatternMatch.push(code, patternId);
     }
   });
@@ -171,10 +176,6 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
     ...soloMatch,
     BASE_FILL_COLOR
   ]);
-  // Alleen landen die daadwerkelijk lid zijn van een geselecteerde alliantie
-  // worden vol zichtbaar; de rest blijft gedimd (0.55), zodat het contrast
-  // met de "niets geselecteerd"-staat behouden blijft in plaats van dat de
-  // hele kaart in één keer ondoorzichtig wordt zodra er iets geselecteerd is.
   map.setPaintProperty('country-fills', 'fill-opacity', [
     'match',
     ['get', 'iso_3166_1_alpha_3'],
@@ -195,15 +196,15 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
   }
 };
 
-export const findCountryAlliances = (countryCode: string, alliances: Alliance[]): Array<{ alliance: Alliance; joinYear: number }> => {
+export const findCountryAlliances = (
+  countryCode: string,
+  alliances: Alliance[]
+): Array<{ alliance: Alliance; joinYear: number; status?: MemberStatus }> => {
   return alliances.reduce((acc, alliance) => {
     const membership = alliance.members.find((member) => member.code === countryCode);
     if (membership) {
-      acc.push({
-        alliance,
-        joinYear: membership.joinYear
-      });
+      acc.push({ alliance, joinYear: membership.joinYear, status: membership.status });
     }
     return acc;
-  }, [] as Array<{ alliance: Alliance; joinYear: number }>);
+  }, [] as Array<{ alliance: Alliance; joinYear: number; status?: MemberStatus }>);
 };
