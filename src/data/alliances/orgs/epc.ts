@@ -7,6 +7,7 @@ export const epc: Alliance = {
   description: "Intergovernmental forum for political and strategic dialogue across the European continent, launched at the initiative of French President Emmanuel Macron and first convened in Prague in October 2022 in response to Russia's invasion of Ukraine. It brings together all EU member states with non-EU European countries, including EFTA states, Western Balkan states, Eastern Partnership countries, the United Kingdom, Turkey and the Caucasus states. Russia and Belarus are excluded from participation.",
   categories: ["politiek"],
   wikipediaTitle: "European Political Community",
+  mapNote: "Kosovo's statehood is not universally recognized; it may not display correctly on the map.",
   members: [
     { code: "AUT", joinYear: 2022 }, { code: "BEL", joinYear: 2022 },
     { code: "BGR", joinYear: 2022 }, { code: "HRV", joinYear: 2022 },
