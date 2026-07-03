@@ -13,8 +13,10 @@ import { csto } from "./alliances/orgs/csto";
 import { eu } from "./alliances/orgs/eu";
 import { g7 } from "./alliances/orgs/g7";
 import { g20 } from "./alliances/orgs/g20";
+import { hanseatic } from "./alliances/orgs/hanseatic";
 import { iaea } from "./alliances/orgs/iaea";
 import { icepact } from "./alliances/orgs/icepact";
+import { iea } from "./alliances/orgs/iea";
 import { msp } from "./alliances/orgs/msp";
 import { nato } from "./alliances/orgs/nato";
 import { oecd } from "./alliances/orgs/oecd";
@@ -30,6 +32,6 @@ export type { Alliance, AllianceCategory, AllianceMember, MemberStatus } from ".
 
 export const alliances: Alliance[] = [
   africacorps, africanunion, asean, atlanticpact, aukus, bri, brics, celac,
-  ceps, cptpp, csto, eu, g7, g20, iaea, icepact, msp, nato, oecd, oic, opec,
-  quad, rcep, safe, sco, usmca,
+  ceps, cptpp, csto, eu, g7, g20, hanseatic, iaea, icepact, iea, msp, nato,
+  oecd, oic, opec, quad, rcep, safe, sco, usmca,
 ].sort((a, b) => a.name.localeCompare(b.name));

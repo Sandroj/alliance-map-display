@@ -1,0 +1,42 @@
+import { Alliance } from "../../alliance-types";
+
+export const iea: Alliance = {
+  id: "iea",
+  name: "International Energy Agency",
+  color: "hsl(24, 70%, 60%)",
+  description: "Paris-based autonomous body founded in 1974 within the OECD framework as a counterweight to OPEC, coordinating energy policy among oil-consuming countries, maintaining strategic oil stockpiles, and guiding the global transition to secure and sustainable energy systems.",
+  categories: ["handel"],
+  wikipediaTitle: "International Energy Agency",
+  members: [
+    { code: "AUT", joinYear: 1974 }, { code: "BEL", joinYear: 1974 },
+    { code: "CAN", joinYear: 1974 }, { code: "DNK", joinYear: 1974 },
+    { code: "DEU", joinYear: 1974 }, { code: "IRL", joinYear: 1974 },
+    { code: "ITA", joinYear: 1974 }, { code: "JPN", joinYear: 1974 },
+    { code: "LUX", joinYear: 1974 }, { code: "NLD", joinYear: 1974 },
+    { code: "NOR", joinYear: 1974 }, { code: "ESP", joinYear: 1974 },
+    { code: "SWE", joinYear: 1974 }, { code: "CHE", joinYear: 1974 },
+    { code: "TUR", joinYear: 1974 }, { code: "GBR", joinYear: 1974 },
+    { code: "USA", joinYear: 1974 }, { code: "GRC", joinYear: 1976 },
+    { code: "NZL", joinYear: 1977 }, { code: "AUS", joinYear: 1979 },
+    { code: "PRT", joinYear: 1981 }, { code: "FIN", joinYear: 1992 },
+    { code: "FRA", joinYear: 1992 }, { code: "HUN", joinYear: 1997 },
+    { code: "CZE", joinYear: 2001 }, { code: "KOR", joinYear: 2002 },
+    { code: "SVK", joinYear: 2007 }, { code: "POL", joinYear: 2008 },
+    { code: "EST", joinYear: 2014 }, { code: "MEX", joinYear: 2018 },
+    { code: "LTU", joinYear: 2022 }, { code: "LVA", joinYear: 2024 },
+    { code: "CHN", joinYear: 2015, status: "partner" },
+    { code: "IDN", joinYear: 2015, status: "partner" },
+    { code: "THA", joinYear: 2015, status: "partner" },
+    { code: "SGP", joinYear: 2016, status: "partner" },
+    { code: "MAR", joinYear: 2016, status: "partner" },
+    { code: "IND", joinYear: 2017, status: "partner" },
+    { code: "ZAF", joinYear: 2018, status: "partner" },
+    { code: "ARG", joinYear: 2022, status: "partner" },
+    { code: "EGY", joinYear: 2022, status: "partner" },
+    { code: "UKR", joinYear: 2022, status: "partner" },
+    { code: "KEN", joinYear: 2023, status: "partner" },
+    { code: "SEN", joinYear: 2023, status: "partner" },
+    { code: "NGA", joinYear: 2025, status: "partner" },
+    { code: "VNM", joinYear: 2026, status: "partner" }
+  ]
+};
