@@ -17,6 +17,7 @@ export const g20: Alliance = {
     { code: "MEX", joinYear: 1999 }, { code: "RUS", joinYear: 1999 },
     { code: "SAU", joinYear: 1999 }, { code: "ZAF", joinYear: 1999 },
     { code: "TUR", joinYear: 1999 }, { code: "GBR", joinYear: 1999 },
-    { code: "USA", joinYear: 1999 }, { code: "EU", joinYear: 1999 }
+    { code: "USA", joinYear: 1999 }, { code: "EU", joinYear: 1999 },
+    { code: "AU", joinYear: 2023 }
   ]
 };

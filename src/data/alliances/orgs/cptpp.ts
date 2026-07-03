@@ -13,6 +13,6 @@ export const cptpp: Alliance = {
     { code: "JPN", joinYear: 2018 }, { code: "MYS", joinYear: 2018 },
     { code: "MEX", joinYear: 2018 }, { code: "NZL", joinYear: 2018 },
     { code: "PER", joinYear: 2018 }, { code: "SGP", joinYear: 2018 },
-    { code: "VNM", joinYear: 2018 }
+    { code: "VNM", joinYear: 2018 }, { code: "GBR", joinYear: 2024 }
   ]
 };
