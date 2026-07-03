@@ -1,15 +1,27 @@
 import { useState } from 'react';
 import WorldMap from '@/components/WorldMap';
-import AllianceSelector from '@/components/AllianceSelector';
-import TopBar from '@/components/TopBar';
+import Header, { InfoKind } from '@/components/Header';
+import AlliancePanel from '@/components/AlliancePanel';
 import CountryDetailDrawer from '@/components/CountryDetailDrawer';
+import OrgProfileModal from '@/components/OrgProfileModal';
+import InfoOverlay from '@/components/InfoOverlay';
+import AnimatedBackground from '@/components/AnimatedBackground';
+import { AboutContent, LegendContent, SourcesContent } from '@/components/InfoContent';
 import { alliances, Alliance, AllianceCategory } from '@/data/alliances';
 import { countries } from '@/data/countries';
+
+const INFO_TITLES: Record<InfoKind, string> = {
+  about: 'About',
+  legend: 'Legend',
+  sources: 'Sources',
+};
 
 const Index = () => {
   const [selectedAlliances, setSelectedAlliances] = useState<Alliance[]>([]);
   const [activeCategory, setActiveCategory] = useState<AllianceCategory | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [openInfo, setOpenInfo] = useState<InfoKind | null>(null);
+  const [profileOrg, setProfileOrg] = useState<Alliance | null>(null);
 
   const toggleAlliance = (alliance: Alliance) => {
     setSelectedAlliances((prev) =>
@@ -19,26 +31,26 @@ const Index = () => {
     );
   };
 
-  const visibleAlliances = activeCategory
-    ? alliances.filter((a) => a.categories.includes(activeCategory))
-    : alliances;
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-emerald-50 p-4">
+    <div className="min-h-screen p-4">
+      <AnimatedBackground />
       <div className="max-w-7xl mx-auto space-y-3">
-        <TopBar
+        <Header
           alliances={alliances}
           countries={countries}
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
           onSelectAlliance={toggleAlliance}
           onSelectCountry={setSelectedCountry}
+          onOpenInfo={setOpenInfo}
         />
 
-        <AllianceSelector
-          alliances={visibleAlliances}
+        <AlliancePanel
+          alliances={alliances}
+          activeCategory={activeCategory}
           selectedIds={selectedAlliances.map((a) => a.id)}
           onToggle={toggleAlliance}
+          onShowInfo={setProfileOrg}
         />
 
         <div className="relative">
@@ -52,9 +64,19 @@ const Index = () => {
             countryCode={selectedCountry}
             alliances={alliances}
             onClose={() => setSelectedCountry(null)}
+            onShowInfo={setProfileOrg}
           />
         </div>
       </div>
+
+      {openInfo && (
+        <InfoOverlay title={INFO_TITLES[openInfo]} onClose={() => setOpenInfo(null)}>
+          {openInfo === 'about' && <AboutContent />}
+          {openInfo === 'legend' && <LegendContent />}
+          {openInfo === 'sources' && <SourcesContent />}
+        </InfoOverlay>
+      )}
+      <OrgProfileModal alliance={profileOrg} onClose={() => setProfileOrg(null)} />
     </div>
   );
 };
