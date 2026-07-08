@@ -43,6 +43,7 @@ const OrgProfileModal: React.FC<OrgProfileModalProps> = ({ alliance, onClose }) 
         </span>
         <span className="font-mono">{stats.memberCount} members</span>
         <span className="font-mono">since {stats.foundingYear}</span>
+        {alliance.asOf && <span className="font-mono">as of {alliance.asOf}</span>}
       </div>
       {alliance.mapNote && <p className="mb-3 text-xs italic text-gray-500">{alliance.mapNote}</p>}
       {loading && (
@@ -72,6 +73,25 @@ const OrgProfileModal: React.FC<OrgProfileModalProps> = ({ alliance, onClose }) 
         </div>
       )}
       {!loading && !summary && <p>{alliance.description}</p>}
+      {alliance.sourceRefs && alliance.sourceRefs.length > 0 && (
+        <div className="mt-4 border-t border-gray-200 pt-3">
+          <div className="mb-1 text-[11px] font-bold uppercase text-gray-500">Curated sources</div>
+          <div className="flex flex-col gap-1">
+            {alliance.sourceRefs.map((source) => (
+              <a
+                key={source.url}
+                href={source.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-blue-700 hover:underline"
+              >
+                {source.title}
+                {source.checkedAt ? ` · checked ${source.checkedAt}` : ''}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </InfoOverlay>
   );
 };

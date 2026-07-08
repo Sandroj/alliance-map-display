@@ -126,7 +126,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
           {selectedAlliances.some((a) => a.members.some((m) => m.status)) && (
             <div className="flex items-center gap-2 opacity-70">
               <span className="w-2.5 h-2.5 rounded-sm bg-gray-400/50" />
-              faded = observer / partner
+              faded = observer / partner / suspended
             </div>
           )}
           {selectedAlliances.length > 1 && (

@@ -16,7 +16,7 @@ export const AboutContent = () => (
 export const LegendContent = () => (
   <div className="space-y-3">
     <p><span className="font-semibold">Solid color</span> — full member of the selected organization.</p>
-    <p><span className="font-semibold">Faded color</span> — observer, dialogue partner or partner country.</p>
+    <p><span className="font-semibold">Faded color</span> — observer, dialogue partner, partner country or suspended member.</p>
     <p><span className="font-semibold">Striped</span> — belongs to two or more of the selected organizations.</p>
     <p><span className="font-semibold">Lens status</span> — Live layers are fully usable now; Mapped layers reuse current organization data; Next layers are being prepared as separate resource, route or dispute overlays.</p>
     <p><span className="font-semibold">Organization profile</span> — opens background information and context for a selected layer.</p>

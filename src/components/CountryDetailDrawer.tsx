@@ -16,6 +16,7 @@ const STATUS_LABELS: Record<MemberStatus, string> = {
   observer: 'Observer',
   dialogue: 'Dialogue partner',
   partner: 'Partner',
+  suspended: 'Suspended',
 };
 
 const CountryDetailDrawer: React.FC<CountryDetailDrawerProps> = ({

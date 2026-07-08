@@ -1,6 +1,6 @@
 export type AllianceCategory = "militair" | "handel" | "politiek" | "religieus";
 
-export type MemberStatus = "observer" | "dialogue" | "partner";
+export type MemberStatus = "observer" | "dialogue" | "partner" | "suspended";
 
 export type StrategicLensId =
   | "alliances"

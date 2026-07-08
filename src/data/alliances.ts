@@ -17,8 +17,12 @@ import { cptpp } from "./alliances/orgs/cptpp";
 import { csto } from "./alliances/orgs/csto";
 import { epc } from "./alliances/orgs/epc";
 import { eu } from "./alliances/orgs/eu";
+import { eaeu } from "./alliances/orgs/eaeu";
+import { efta } from "./alliances/orgs/efta";
+import { fiveeyes } from "./alliances/orgs/fiveeyes";
 import { g7 } from "./alliances/orgs/g7";
 import { g20 } from "./alliances/orgs/g20";
+import { gcc } from "./alliances/orgs/gcc";
 import { ggi } from "./alliances/orgs/ggi";
 import { hanseatic } from "./alliances/orgs/hanseatic";
 import { iaea } from "./alliances/orgs/iaea";
@@ -27,6 +31,7 @@ import { icepact } from "./alliances/orgs/icepact";
 import { iea } from "./alliances/orgs/iea";
 import { iomed } from "./alliances/orgs/iomed";
 import { msp } from "./alliances/orgs/msp";
+import { mercosur } from "./alliances/orgs/mercosur";
 import { nato } from "./alliances/orgs/nato";
 import { oecd } from "./alliances/orgs/oecd";
 import { oic } from "./alliances/orgs/oic";
@@ -44,6 +49,6 @@ export type { Alliance, AllianceCategory, AllianceMember, MemberStatus } from ".
 export const alliances: Alliance[] = [
   aachen, africacorps, africanunion, arableague, arcticcouncil, asean,
   atlanticpact, aukus, bri, brics, cdrn, celac, ceps, cofa, cptpp, csto, epc,
-  eu, g7, g20, ggi, hanseatic, iaea, icc, icepact, iea, iomed, msp, nato,
+  eu, eaeu, efta, fiveeyes, g7, g20, gcc, ggi, hanseatic, iaea, icc, icepact, iea, iomed, msp, mercosur, nato,
   oecd, oic, opec, osce, parischarter, quad, rcep, safe, sco, usmca,
 ].sort((a, b) => a.name.localeCompare(b.name));
