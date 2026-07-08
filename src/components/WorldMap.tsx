@@ -111,7 +111,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
       <div ref={mapContainer} className="absolute inset-0 rounded-xl overflow-hidden" />
       {selectedAlliances.length === 0 && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 px-4 py-2 text-xs text-gray-600 bg-white/60 backdrop-blur-xl border border-white/70 rounded-full shadow-sm pointer-events-none">
-          Select an alliance to explore the map
+          Choose a mapped layer to reveal country alignments
         </div>
       )}
 

@@ -39,7 +39,7 @@ const OrgProfileModal: React.FC<OrgProfileModalProps> = ({ alliance, onClose }) 
     <InfoOverlay title={alliance.name} onClose={onClose}>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3 text-xs text-gray-500">
         <span>
-          {alliance.categories.map((c) => `${CATEGORY_META[c].icon} ${CATEGORY_META[c].label}`).join(' · ')}
+          {alliance.categories.map((c) => CATEGORY_META[c].label).join(' · ')}
         </span>
         <span className="font-mono">{stats.memberCount} members</span>
         <span className="font-mono">since {stats.foundingYear}</span>

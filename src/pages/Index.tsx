@@ -2,12 +2,15 @@ import { useState } from 'react';
 import WorldMap from '@/components/WorldMap';
 import Header, { InfoKind } from '@/components/Header';
 import AlliancePanel from '@/components/AlliancePanel';
+import LensNavigation from '@/components/LensNavigation';
+import AtlasBriefing from '@/components/AtlasBriefing';
 import CountryDetailDrawer from '@/components/CountryDetailDrawer';
 import OrgProfileModal from '@/components/OrgProfileModal';
 import InfoOverlay from '@/components/InfoOverlay';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { AboutContent, LegendContent, SourcesContent } from '@/components/InfoContent';
 import { alliances, Alliance, AllianceCategory } from '@/data/alliances';
+import { StrategicLensId } from '@/data/alliance-types';
 import { countries } from '@/data/countries';
 
 const INFO_TITLES: Record<InfoKind, string> = {
@@ -19,6 +22,7 @@ const INFO_TITLES: Record<InfoKind, string> = {
 const Index = () => {
   const [selectedAlliances, setSelectedAlliances] = useState<Alliance[]>([]);
   const [activeCategory, setActiveCategory] = useState<AllianceCategory | null>(null);
+  const [activeLens, setActiveLens] = useState<StrategicLensId>('alliances');
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [openInfo, setOpenInfo] = useState<InfoKind | null>(null);
   const [profileOrg, setProfileOrg] = useState<Alliance | null>(null);
@@ -38,16 +42,25 @@ const Index = () => {
         <Header
           alliances={alliances}
           countries={countries}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
           onSelectAlliance={toggleAlliance}
           onSelectCountry={setSelectedCountry}
           onOpenInfo={setOpenInfo}
         />
 
+        <LensNavigation
+          activeLens={activeLens}
+          onLensChange={(lens) => {
+            setActiveLens(lens);
+            setActiveCategory(null);
+          }}
+        />
+
+        <AtlasBriefing activeLens={activeLens} alliances={alliances} />
+
         <AlliancePanel
           alliances={alliances}
           activeCategory={activeCategory}
+          activeLens={activeLens}
           selectedIds={selectedAlliances.map((a) => a.id)}
           onToggle={toggleAlliance}
           onShowInfo={setProfileOrg}

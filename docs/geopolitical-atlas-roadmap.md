@@ -230,10 +230,20 @@ Aanbevolen richting:
 3. Laat `main` niet automatisch groot werk deployen zonder akkoord.
 4. Gebruik branches voor inhoudelijke uitbreidingen.
 
-Cloudflare Pages is de beste gratis productie-optie als er een eigen domein komt of
-als snelheid/CDN belangrijk is. GitHub Pages is het simpelst als alles volledig bij
-GitHub mag blijven. Vercel en Netlify zijn prima, maar voegen hier weinig toe zolang
-er geen serverfuncties nodig zijn.
+Hostingkeuze na Max' voorkeur:
+
+- Vercel is een goede en bekende keuze voor dit project. De app is frontend-only,
+  dus Vercel kan dit gratis en eenvoudig hosten via GitHub met preview deployments.
+  Het is vooral aantrekkelijk omdat de workflow bekend is en deploys/rollbacks
+  prettig werken.
+- Cloudflare Pages blijft rationeel de meest robuuste gratis statische host als
+  kosten, CDN en custom domains de prioriteit zijn. De leercurve is iets hoger.
+- Lovable blijft nuttig als bouw/editorlaag, maar is minder ideaal als enige
+  productiehost omdat bouwen en hosting met credits samenhangen.
+
+Aanbevolen praktische keuze: **Vercel voor productie nu**, met de optie om later
+naar Cloudflare Pages te verplaatsen als traffic of custom-domain-beheer daarom
+vraagt. Houd Lovable gekoppeld aan GitHub, maar behandel `main` als productie.
 
 ## Uitvoeringsplan
 
@@ -294,12 +304,13 @@ er geen serverfuncties nodig zijn.
 
 ## Eerste aanbevolen keuze
 
-Mijn voorkeur:
+Gekozen richting:
 
 - Naam: Geopolitical Atlas.
-- Scope: staten plus expliciete uitzonderingen voor disputed/unrecognized territories,
-  chokepoints, bases en routes.
+- Scope: alles wat geopolitiek structureel relevant is: staten, disputed/unrecognized
+  territories, bases, havens, routes, zeestraten en strategische resourceposities.
 - Resources MVP: oil, gas, lithium, cobalt, nickel, copper, uranium, rare earths,
   grain and fertilizer.
-- Hosting: Cloudflare Pages voor productie, Lovable alleen als bouw/editorlaag.
-- Toon: neutraal, compact en bronbewust.
+- Hosting: Vercel als bekende en snelle productiehost; Cloudflare Pages blijft de
+  beste gratis fallback als kosten/edge-limieten belangrijker worden.
+- Toon: toegankelijk, overtuigend, bronbewust en visueel van zeer hoog niveau.
