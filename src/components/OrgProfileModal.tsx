@@ -42,7 +42,7 @@ const OrgProfileModal: React.FC<OrgProfileModalProps> = ({ alliance, onClose }) 
           {alliance.categories.map((c) => CATEGORY_META[c].label).join(' · ')}
         </span>
         <span className="font-mono">{stats.memberCount} members</span>
-        <span className="font-mono">since {stats.foundingYear}</span>
+        {stats.foundingYear && <span className="font-mono">since {stats.foundingYear}</span>}
         {alliance.asOf && <span className="font-mono">as of {alliance.asOf}</span>}
       </div>
       {alliance.mapNote && <p className="mb-3 text-xs italic text-gray-500">{alliance.mapNote}</p>}

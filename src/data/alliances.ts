@@ -13,6 +13,8 @@ import { cdrn } from "./alliances/orgs/cdrn";
 import { celac } from "./alliances/orgs/celac";
 import { ceps } from "./alliances/orgs/ceps";
 import { cofa } from "./alliances/orgs/cofa";
+import { commonwealth } from "./alliances/orgs/commonwealth";
+import { councilofeurope } from "./alliances/orgs/councilofeurope";
 import { cptpp } from "./alliances/orgs/cptpp";
 import { csto } from "./alliances/orgs/csto";
 import { epc } from "./alliances/orgs/epc";
@@ -34,6 +36,7 @@ import { msp } from "./alliances/orgs/msp";
 import { mercosur } from "./alliances/orgs/mercosur";
 import { nato } from "./alliances/orgs/nato";
 import { oecd } from "./alliances/orgs/oecd";
+import { oas } from "./alliances/orgs/oas";
 import { oic } from "./alliances/orgs/oic";
 import { opec } from "./alliances/orgs/opec";
 import { osce } from "./alliances/orgs/osce";
@@ -48,7 +51,8 @@ export type { Alliance, AllianceCategory, AllianceMember, MemberStatus } from ".
 
 export const alliances: Alliance[] = [
   aachen, africacorps, africanunion, arableague, arcticcouncil, asean,
-  atlanticpact, aukus, bri, brics, cdrn, celac, ceps, cofa, cptpp, csto, epc,
-  eu, eaeu, efta, fiveeyes, g7, g20, gcc, ggi, hanseatic, iaea, icc, icepact, iea, iomed, msp, mercosur, nato,
+  atlanticpact, aukus, bri, brics, cdrn, celac, ceps, cofa, commonwealth,
+  councilofeurope, cptpp, csto, epc, eu, eaeu, efta, fiveeyes, g7, g20, gcc,
+  ggi, hanseatic, iaea, icc, icepact, iea, iomed, msp, mercosur, nato, oas,
   oecd, oic, opec, osce, parischarter, quad, rcep, safe, sco, usmca,
 ].sort((a, b) => a.name.localeCompare(b.name));

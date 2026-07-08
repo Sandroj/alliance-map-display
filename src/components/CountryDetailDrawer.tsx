@@ -84,7 +84,7 @@ const CountryDetailDrawer: React.FC<CountryDetailDrawerProps> = ({
                   {alliance.categories.map((c) => CATEGORY_META[c].label).join(' / ')}
                 </span>
               </span>
-              <span className="font-mono">{joinYear}</span>
+              {joinYear && <span className="font-mono">{joinYear}</span>}
             </span>
             {status && (
               <span className="block mt-0.5 text-[10px] font-normal opacity-75">{STATUS_LABELS[status]}</span>

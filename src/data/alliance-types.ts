@@ -35,7 +35,7 @@ export interface SourceRef {
 
 export interface AllianceMember {
   code: string;        // ISO 3166-1 alpha-3, of pseudo-code (EU, AU, XAB, XSO, XTR)
-  joinYear: number;    // jaar waarin dit land zijn huidige status kreeg
+  joinYear?: number;   // jaar waarin dit land zijn huidige status kreeg, indien betrouwbaar bekend
   status?: MemberStatus; // afwezig = volwaardig lid
 }
 
@@ -46,6 +46,7 @@ export interface Alliance {
   description: string;
   categories: AllianceCategory[]; // eerste = primaire categorie
   members: AllianceMember[];
+  foundedYear?: number;
   mapNote?: string;
   wikipediaTitle?: string;
   kind?: StrategicItemKind;

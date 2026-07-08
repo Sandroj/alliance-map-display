@@ -67,7 +67,7 @@ const AllianceChip: React.FC<{
       <TooltipContent>
         <p className="max-w-xs text-sm font-medium">{alliance.description}</p>
         <p className="text-xs text-muted-foreground mt-1">
-          {stats.memberCount} members · since {stats.foundingYear}
+          {stats.memberCount} members{stats.foundingYear ? ` · since ${stats.foundingYear}` : ''}
         </p>
       </TooltipContent>
     </Tooltip>
