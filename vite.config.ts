@@ -19,4 +19,17 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+          if (id.includes("mapbox-gl")) return "mapbox";
+          if (id.includes("react") || id.includes("scheduler")) return "react";
+          if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
+          return "vendor";
+        },
+      },
+    },
+  },
 }));

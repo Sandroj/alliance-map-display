@@ -25,9 +25,16 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
 
+    const container = mapContainer.current;
+    const resizeObserver = new ResizeObserver(() => {
+      map.current?.resize();
+    });
+
     try {
-      map.current = initializeMap(mapContainer.current, mapboxToken);
+      map.current = initializeMap(container, mapboxToken);
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      resizeObserver.observe(container);
+      requestAnimationFrame(() => map.current?.resize());
 
       map.current.on('error', (e) => {
         console.error('Mapbox error:', e);
@@ -90,6 +97,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
     }
 
     return () => {
+      resizeObserver.disconnect();
       map.current?.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,14 +109,16 @@ const WorldMap: React.FC<WorldMapProps> = ({ selectedAlliances, onCountryClick }
   }, [selectedAlliances]);
 
   return (
-    <div className="relative w-full h-[calc(100vh-9rem)]">
+    <div className="relative h-[calc(100vh-7rem)] min-h-[34rem] w-full">
       {error && (
         <Alert variant="destructive" className="absolute top-4 left-4 right-4 z-20">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
       {!mapboxToken && <MapTokenInput onTokenSet={setMapboxToken} />}
-      <div ref={mapContainer} className="absolute inset-0 rounded-xl overflow-hidden" />
+      <div className="absolute inset-0 overflow-hidden rounded-xl">
+        <div ref={mapContainer} className="h-full w-full" />
+      </div>
       {selectedAlliances.length === 0 && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 px-4 py-2 text-xs text-gray-600 bg-white/60 backdrop-blur-xl border border-white/70 rounded-full shadow-sm pointer-events-none">
           Choose a mapped layer to reveal country alignments

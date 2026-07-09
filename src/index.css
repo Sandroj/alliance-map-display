@@ -128,25 +128,15 @@
   width: 140vw;
   left: -20vw;
   transform: rotate(-8deg);
-  opacity: 0.42;
-  will-change: transform;
+  opacity: 0.28;
 }
 
 .atlas-band-1 {
   top: 8vh;
   background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.12), rgba(8, 145, 178, 0.09), transparent);
-  animation: atlas-drift-1 18s ease-in-out infinite;
 }
 
 .atlas-band-2 {
   bottom: -6vh;
   background: linear-gradient(90deg, transparent, rgba(5, 150, 105, 0.11), rgba(202, 138, 4, 0.08), transparent);
-  animation: atlas-drift-2 22s ease-in-out infinite;
-}
-
-@keyframes atlas-drift-1 { 0%, 100% { transform: translateX(0) rotate(-8deg); } 50% { transform: translateX(4vw) rotate(-8deg); } }
-@keyframes atlas-drift-2 { 0%, 100% { transform: translateX(0) rotate(-8deg); } 50% { transform: translateX(-4vw) rotate(-8deg); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .atlas-band { animation: none; }
 }

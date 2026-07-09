@@ -30,11 +30,11 @@ const ICONS: Record<StrategicLensId, React.ComponentType<{ className?: string }>
 const STATUS_LABELS = {
   live: "Live",
   mapped: "Mapped",
-  planned: "Next",
+  planned: "Soon",
 };
 
 const LensNavigation: React.FC<LensNavigationProps> = ({ activeLens, onLensChange }) => (
-  <section className="flex gap-2 overflow-x-auto pb-1 md:grid md:grid-cols-7 md:overflow-visible md:pb-0">
+  <section className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-2">
     {STRATEGIC_LENSES.map((lens) => {
       const active = lens.id === activeLens;
       const Icon = ICONS[lens.id];
@@ -46,7 +46,7 @@ const LensNavigation: React.FC<LensNavigationProps> = ({ activeLens, onLensChang
           data-testid={`lens-${lens.id}`}
           onClick={() => onLensChange(lens.id)}
           aria-pressed={active}
-          className="group min-h-[5.25rem] min-w-[12rem] rounded-lg border px-3 py-2.5 text-left transition-all focus-visible:ring-2 focus-visible:ring-gray-500 md:min-w-0"
+          className="group rounded-lg border px-2.5 py-2 text-left transition-all hover:-translate-y-px focus-visible:ring-2 focus-visible:ring-gray-500"
           style={{
             backgroundColor: active ? withAlpha(lens.accent, 0.14) : "rgba(255,255,255,0.62)",
             borderColor: active ? withAlpha(lens.accent, 0.65) : "rgba(255,255,255,0.72)",
@@ -55,7 +55,7 @@ const LensNavigation: React.FC<LensNavigationProps> = ({ activeLens, onLensChang
         >
           <span className="flex items-center justify-between gap-2">
             <span
-              className="grid h-8 w-8 place-items-center rounded-md"
+              className="grid h-7 w-7 place-items-center rounded-md"
               style={{ backgroundColor: withAlpha(lens.accent, active ? 0.2 : 0.12), color: lens.accent }}
             >
               <Icon className="h-4 w-4" />
@@ -67,8 +67,8 @@ const LensNavigation: React.FC<LensNavigationProps> = ({ activeLens, onLensChang
               {STATUS_LABELS[lens.status]}
             </span>
           </span>
-          <span className="mt-2 block text-sm font-bold text-gray-950">{lens.shortLabel}</span>
-          <span className="mt-1 block text-[11px] leading-snug text-gray-500">{lens.description}</span>
+          <span className="mt-1.5 block text-sm font-bold text-gray-950">{lens.shortLabel}</span>
+          <span className="mt-0.5 block text-[10px] leading-snug text-gray-500 line-clamp-2">{lens.description}</span>
         </button>
       );
     })}

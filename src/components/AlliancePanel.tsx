@@ -95,7 +95,7 @@ const AlliancePanel: React.FC<AlliancePanelProps> = ({
   const lensAlliances = alliances.filter((alliance) => belongsToLens(alliance, activeLens));
 
   return (
-    <div className="flex flex-col gap-2.5 p-3 bg-white/58 backdrop-blur-xl border border-white/70 shadow-sm rounded-xl">
+    <div className="flex min-h-0 flex-col gap-2.5 rounded-xl border border-white/70 bg-white/64 p-3 shadow-sm backdrop-blur-xl lg:flex-1 lg:overflow-y-auto">
       <div className="flex flex-wrap items-center gap-2">
         <div>
           <div className="text-xs font-bold uppercase text-gray-950">
@@ -136,7 +136,7 @@ const AlliancePanel: React.FC<AlliancePanelProps> = ({
                 }`}
               >
                 <div className="overflow-hidden">
-                  <div className="flex flex-wrap gap-2 pt-1.5 pb-1">
+                  <div className="flex flex-wrap gap-1.5 pt-1.5 pb-1">
                     {orgs.map((alliance) => (
                       <AllianceChip
                         key={alliance.id}

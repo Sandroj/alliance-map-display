@@ -40,7 +40,7 @@ export const STRATEGIC_LENSES: StrategicLens[] = [
     shortLabel: "Resources",
     description: "Energy systems, critical minerals, food leverage and strategic supply chains.",
     accent: "#059669",
-    status: "planned",
+    status: "mapped",
   },
   {
     id: "influence",

@@ -7,6 +7,20 @@ export const msp: Alliance = {
   description: "Partnership of resource-rich and industrialized countries working to secure supply chains for critical minerals such as lithium, gallium and germanium, launched in 2022.",
   categories: ["militair", "handel"],
   wikipediaTitle: "Minerals Security Partnership",
+  kind: "initiative",
+  formality: "formal",
+  lensIds: ["energy-resources", "trade", "security", "alliances"],
+  foundedYear: 2022,
+  asOf: "2026-07-09",
+  reviewCadence: "yearly",
+  confidence: "high",
+  sourceRefs: [
+    {
+      title: "U.S. State Department: Minerals Security Partnership",
+      url: "https://www.state.gov/minerals-security-partnership/",
+      checkedAt: "2026-07-09",
+    },
+  ],
   members: [
     { code: "USA", joinYear: 2022 }, { code: "AUS", joinYear: 2022 },
     { code: "CAN", joinYear: 2022 }, { code: "FIN", joinYear: 2022 },
