@@ -23,11 +23,7 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (!id.includes("node_modules")) return;
-          if (id.includes("mapbox-gl")) return "mapbox";
-          if (id.includes("react") || id.includes("scheduler")) return "react";
-          if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
-          return "vendor";
+          if (id.includes("node_modules/mapbox-gl")) return "mapbox";
         },
       },
     },
