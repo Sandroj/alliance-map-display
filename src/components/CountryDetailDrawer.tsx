@@ -16,6 +16,7 @@ const STATUS_LABELS: Record<MemberStatus, string> = {
   observer: 'Observer',
   dialogue: 'Dialogue partner',
   partner: 'Partner',
+  suspended: 'Suspended',
 };
 
 const CountryDetailDrawer: React.FC<CountryDetailDrawerProps> = ({
@@ -80,10 +81,10 @@ const CountryDetailDrawer: React.FC<CountryDetailDrawerProps> = ({
               <span>
                 {alliance.name}{' '}
                 <span className="text-[9px] opacity-70">
-                  {alliance.categories.map((c) => CATEGORY_META[c].icon).join('')}
+                  {alliance.categories.map((c) => CATEGORY_META[c].label).join(' / ')}
                 </span>
               </span>
-              <span className="font-mono">{joinYear}</span>
+              {joinYear && <span className="font-mono">{joinYear}</span>}
             </span>
             {status && (
               <span className="block mt-0.5 text-[10px] font-normal opacity-75">{STATUS_LABELS[status]}</span>

@@ -1,0 +1,42 @@
+import { Alliance } from "../../alliance-types";
+
+export const commonwealth: Alliance = {
+  id: "commonwealth",
+  name: "Commonwealth",
+  color: "hsl(207, 72%, 45%)",
+  description: "Voluntary association of 56 independent countries, many with historic links to the former British Empire, coordinating around democracy, development, small states, youth and shared legal-political traditions.",
+  categories: ["politiek"],
+  wikipediaTitle: "Commonwealth of Nations",
+  kind: "organization",
+  formality: "formal",
+  lensIds: ["alliances", "influence"],
+  foundedYear: 1949,
+  asOf: "2026-07-08",
+  reviewCadence: "yearly",
+  confidence: "high",
+  sourceRefs: [
+    {
+      title: "Commonwealth member countries",
+      url: "https://thecommonwealth.org/our-member-countries",
+      checkedAt: "2026-07-08",
+    },
+  ],
+  members: [
+    { code: "BWA" }, { code: "CMR" }, { code: "GAB" }, { code: "GMB" },
+    { code: "GHA" }, { code: "KEN" }, { code: "SWZ" }, { code: "LSO" },
+    { code: "MWI" }, { code: "MUS" }, { code: "MOZ" }, { code: "NAM" },
+    { code: "NGA" }, { code: "RWA" }, { code: "SYC" }, { code: "SLE" },
+    { code: "ZAF" }, { code: "TGO" }, { code: "UGA" }, { code: "TZA" },
+    { code: "ZMB" },
+    { code: "BGD" }, { code: "BRN" }, { code: "IND" }, { code: "MYS" },
+    { code: "MDV" }, { code: "PAK" }, { code: "SGP" }, { code: "LKA" },
+    { code: "ATG" }, { code: "BHS" }, { code: "BRB" }, { code: "BLZ" },
+    { code: "CAN" }, { code: "DMA" }, { code: "GRD" }, { code: "GUY" },
+    { code: "JAM" }, { code: "LCA" }, { code: "KNA" }, { code: "VCT" },
+    { code: "TTO" },
+    { code: "CYP" }, { code: "MLT" }, { code: "GBR" },
+    { code: "AUS" }, { code: "FJI" }, { code: "KIR" }, { code: "NRU" },
+    { code: "NZL" }, { code: "PNG" }, { code: "WSM" }, { code: "SLB" },
+    { code: "TON" }, { code: "TUV" }, { code: "VUT" },
+  ],
+};

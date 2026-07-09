@@ -199,12 +199,12 @@ export const updateAllianceHighlights = (map: mapboxgl.Map, alliances: Alliance[
 export const findCountryAlliances = (
   countryCode: string,
   alliances: Alliance[]
-): Array<{ alliance: Alliance; joinYear: number; status?: MemberStatus }> => {
+): Array<{ alliance: Alliance; joinYear?: number; status?: MemberStatus }> => {
   return alliances.reduce((acc, alliance) => {
     const membership = alliance.members.find((member) => member.code === countryCode);
     if (membership) {
       acc.push({ alliance, joinYear: membership.joinYear, status: membership.status });
     }
     return acc;
-  }, [] as Array<{ alliance: Alliance; joinYear: number; status?: MemberStatus }>);
+  }, [] as Array<{ alliance: Alliance; joinYear?: number; status?: MemberStatus }>);
 };

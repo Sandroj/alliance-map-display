@@ -1,14 +1,17 @@
-import { useState } from 'react';
-import WorldMap from '@/components/WorldMap';
+import { lazy, Suspense, useState } from 'react';
 import Header, { InfoKind } from '@/components/Header';
 import AlliancePanel from '@/components/AlliancePanel';
+import LensNavigation from '@/components/LensNavigation';
 import CountryDetailDrawer from '@/components/CountryDetailDrawer';
-import OrgProfileModal from '@/components/OrgProfileModal';
 import InfoOverlay from '@/components/InfoOverlay';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { AboutContent, LegendContent, SourcesContent } from '@/components/InfoContent';
 import { alliances, Alliance, AllianceCategory } from '@/data/alliances';
+import { StrategicLensId } from '@/data/alliance-types';
 import { countries } from '@/data/countries';
+
+const WorldMap = lazy(() => import('@/components/WorldMap'));
+const OrgProfileModal = lazy(() => import('@/components/OrgProfileModal'));
 
 const INFO_TITLES: Record<InfoKind, string> = {
   about: 'About',
@@ -19,6 +22,7 @@ const INFO_TITLES: Record<InfoKind, string> = {
 const Index = () => {
   const [selectedAlliances, setSelectedAlliances] = useState<Alliance[]>([]);
   const [activeCategory, setActiveCategory] = useState<AllianceCategory | null>(null);
+  const [activeLens, setActiveLens] = useState<StrategicLensId>('alliances');
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [openInfo, setOpenInfo] = useState<InfoKind | null>(null);
   const [profileOrg, setProfileOrg] = useState<Alliance | null>(null);
@@ -34,38 +38,57 @@ const Index = () => {
   return (
     <div className="min-h-screen p-4">
       <AnimatedBackground />
-      <div className="max-w-7xl mx-auto space-y-3">
+      <div className="mx-auto flex max-w-[96rem] flex-col gap-3">
         <Header
           alliances={alliances}
           countries={countries}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
           onSelectAlliance={toggleAlliance}
           onSelectCountry={setSelectedCountry}
           onOpenInfo={setOpenInfo}
         />
 
-        <AlliancePanel
-          alliances={alliances}
-          activeCategory={activeCategory}
-          selectedIds={selectedAlliances.map((a) => a.id)}
-          onToggle={toggleAlliance}
-          onShowInfo={setProfileOrg}
-        />
+        <div className="grid gap-3 lg:grid-cols-[24rem_minmax(0,1fr)]">
+          <aside className="order-2 flex flex-col gap-3 lg:sticky lg:top-24 lg:order-1 lg:max-h-[calc(100vh-7rem)]">
+            <LensNavigation
+              activeLens={activeLens}
+              onLensChange={(lens) => {
+                setActiveLens(lens);
+                setActiveCategory(null);
+              }}
+            />
 
-        <div className="relative">
-          <WorldMap
-            selectedAlliances={selectedAlliances}
-            onCountryClick={(code) =>
-              setSelectedCountry((prev) => (prev === code ? null : code))
-            }
-          />
-          <CountryDetailDrawer
-            countryCode={selectedCountry}
-            alliances={alliances}
-            onClose={() => setSelectedCountry(null)}
-            onShowInfo={setProfileOrg}
-          />
+            <AlliancePanel
+              alliances={alliances}
+              activeCategory={activeCategory}
+              activeLens={activeLens}
+              selectedIds={selectedAlliances.map((a) => a.id)}
+              onToggle={toggleAlliance}
+              onShowInfo={setProfileOrg}
+            />
+          </aside>
+
+          <div className="relative order-1 min-h-[34rem] lg:order-2">
+            <Suspense
+              fallback={
+                <div className="grid h-[calc(100vh-9rem)] min-h-[34rem] place-items-center rounded-xl border border-white/70 bg-white/58 text-sm font-semibold text-gray-500 shadow-sm backdrop-blur-xl">
+                  Loading strategic map...
+                </div>
+              }
+            >
+              <WorldMap
+                selectedAlliances={selectedAlliances}
+                onCountryClick={(code) =>
+                  setSelectedCountry((prev) => (prev === code ? null : code))
+                }
+              />
+            </Suspense>
+            <CountryDetailDrawer
+              countryCode={selectedCountry}
+              alliances={alliances}
+              onClose={() => setSelectedCountry(null)}
+              onShowInfo={setProfileOrg}
+            />
+          </div>
         </div>
       </div>
 
@@ -76,7 +99,11 @@ const Index = () => {
           {openInfo === 'sources' && <SourcesContent />}
         </InfoOverlay>
       )}
-      <OrgProfileModal alliance={profileOrg} onClose={() => setProfileOrg(null)} />
+      {profileOrg && (
+        <Suspense fallback={null}>
+          <OrgProfileModal alliance={profileOrg} onClose={() => setProfileOrg(null)} />
+        </Suspense>
+      )}
     </div>
   );
 };

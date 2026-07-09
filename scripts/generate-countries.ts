@@ -12,6 +12,8 @@ const countriesData: typeof worldCountries =
 const EXTRA_ENTRIES: Record<string, { name: string; flag: string }> = {
   EU: { name: 'European Union', flag: '🇪🇺' },
   AU: { name: 'African Union', flag: '🌍' },
+  TUV: { name: 'Tuvalu', flag: '🇹🇻' },
+  XKX: { name: 'Kosovo', flag: '🇽🇰' },
   XAB: { name: 'Abkhazia', flag: '🏳️' },
   XSO: { name: 'South Ossetia', flag: '🏳️' },
   XTR: { name: 'Transnistria', flag: '🏳️' },

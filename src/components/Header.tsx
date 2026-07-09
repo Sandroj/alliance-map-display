@@ -1,16 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Alliance, AllianceCategory } from '@/data/alliances';
+import { BookOpenText, CircleHelp, Database, Globe2, Search } from 'lucide-react';
+import { Alliance } from '@/data/alliances';
 import { CountryInfo } from '@/data/countries';
-import { CATEGORY_META, CATEGORY_ORDER } from '@/data/categories';
-import { withAlpha } from '@/utils/colorUtils';
+import { CATEGORY_META } from '@/data/categories';
 
 export type InfoKind = 'about' | 'legend' | 'sources';
 
 interface HeaderProps {
   alliances: Alliance[];
   countries: Record<string, CountryInfo>;
-  activeCategory: AllianceCategory | null;
-  onCategoryChange: (category: AllianceCategory | null) => void;
   onSelectAlliance: (alliance: Alliance) => void;
   onSelectCountry: (code: string) => void;
   onOpenInfo: (which: InfoKind) => void;
@@ -20,17 +18,15 @@ type SearchResult =
   | { kind: 'alliance'; key: string; alliance: Alliance }
   | { kind: 'country'; key: string; code: string; label: string };
 
-const INFO_ITEMS: { kind: InfoKind; label: string }[] = [
-  { kind: 'about', label: 'About' },
-  { kind: 'legend', label: 'Legend' },
-  { kind: 'sources', label: 'Sources' },
+const INFO_ITEMS: { kind: InfoKind; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+  { kind: 'about', label: 'About', icon: CircleHelp },
+  { kind: 'legend', label: 'Legend', icon: BookOpenText },
+  { kind: 'sources', label: 'Sources', icon: Database },
 ];
 
 const Header: React.FC<HeaderProps> = ({
   alliances,
   countries,
-  activeCategory,
-  onCategoryChange,
   onSelectAlliance,
   onSelectCountry,
   onOpenInfo,
@@ -92,45 +88,34 @@ const Header: React.FC<HeaderProps> = ({
   }, [query]);
 
   return (
-    <header className="sticky top-4 z-30 flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 bg-white/60 backdrop-blur-xl border border-white/60 shadow-sm rounded-xl">
-      <div className="font-heading font-bold text-lg text-gray-900">🌐 World Alliances</div>
+    <header className="sticky top-4 z-30 flex flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3 bg-white/72 backdrop-blur-xl border border-white/70 shadow-sm rounded-xl">
+      <div className="flex min-w-[13rem] items-center gap-3">
+        <span className="grid h-10 w-10 place-items-center rounded-lg bg-gray-950 text-white shadow-sm">
+          <Globe2 className="h-5 w-5" />
+        </span>
+        <span>
+          <span className="block font-heading text-lg font-bold text-gray-950">Geopolitical Atlas</span>
+          <span className="block text-[11px] font-medium text-gray-500">Strategic alignments, resources and routes</span>
+        </span>
+      </div>
 
-      <nav className="flex gap-1.5 flex-wrap" aria-label="Categories">
-        {CATEGORY_ORDER.map((category) => {
-          const meta = CATEGORY_META[category];
-          const active = activeCategory === category;
-          return (
-            <button
-              key={category}
-              onClick={() => onCategoryChange(active ? null : category)}
-              aria-pressed={active}
-              className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all focus-visible:ring-2 focus-visible:ring-gray-500"
-              style={{
-                backgroundColor: active ? meta.color : withAlpha(meta.color, 0.1),
-                color: active ? '#ffffff' : meta.color,
-              }}
-            >
-              {meta.icon} {meta.label}
-            </button>
-          );
-        })}
-      </nav>
-
-      <div className="flex-1" />
-
-      <nav className="flex gap-1 flex-wrap" aria-label="Information">
-        {INFO_ITEMS.map(({ kind, label }) => (
+      <nav className="flex gap-1.5 flex-wrap" aria-label="Information">
+        {INFO_ITEMS.map(({ kind, label, icon: Icon }) => (
           <button
             key={kind}
             onClick={() => onOpenInfo(kind)}
-            className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-900/5 hover:text-gray-900 transition-colors focus-visible:ring-2 focus-visible:ring-gray-500"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-900/5 hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-500"
           >
+            <Icon className="h-3.5 w-3.5" />
             {label}
           </button>
         ))}
       </nav>
 
-      <div className="relative w-56" ref={searchRef}>
+      <div className="flex-1" />
+
+      <div className="relative w-full sm:w-72" ref={searchRef}>
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <input
           type="text"
           value={query}
@@ -141,7 +126,7 @@ const Header: React.FC<HeaderProps> = ({
           aria-expanded={results.length > 0}
           aria-controls="header-search-results"
           aria-activedescendant={results.length > 0 ? `search-opt-${activeIndex}` : undefined}
-          className="w-full px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 bg-white/80 border border-gray-200 rounded-lg outline-none focus:border-gray-400 focus-visible:ring-2 focus-visible:ring-gray-400 transition-colors"
+          className="w-full rounded-lg border border-gray-200 bg-white/86 py-2 pl-9 pr-3 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-400 focus-visible:ring-2 focus-visible:ring-gray-400"
         />
         {query.trim() && (
           <div
@@ -166,7 +151,7 @@ const Header: React.FC<HeaderProps> = ({
                   <>
                     {r.alliance.name}{' '}
                     <span className="text-gray-400 text-xs">
-                      {r.alliance.categories.map((c) => CATEGORY_META[c].icon).join('')} alliance
+                      {CATEGORY_META[r.alliance.categories[0]].label} layer
                     </span>
                   </>
                 ) : (
