@@ -56,7 +56,7 @@ export const STRATEGIC_LENSES: StrategicLens[] = [
     shortLabel: "Disputes",
     description: "Structural conflict context, disputed territories and frozen participation.",
     accent: "#be123c",
-    status: "planned",
+    status: "mapped",
   },
   {
     id: "chokepoints",
@@ -64,6 +64,6 @@ export const STRATEGIC_LENSES: StrategicLens[] = [
     shortLabel: "Routes",
     description: "Strategic sea lanes, canals, pipelines, ports and logistics corridors.",
     accent: "#0891b2",
-    status: "planned",
+    status: "mapped",
   },
 ];

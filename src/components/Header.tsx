@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BookOpenText, CircleHelp, Database, Globe2, Search } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 import { Alliance } from '@/data/alliances';
 import { CountryInfo } from '@/data/countries';
 import { CATEGORY_META } from '@/data/categories';
+import { ATLAS_MODE_NAV } from '@/data/atlas-modes';
 
 export type InfoKind = 'about' | 'legend' | 'sources';
 
@@ -100,6 +102,16 @@ const Header: React.FC<HeaderProps> = ({
       </div>
 
       <nav className="flex gap-1.5 flex-wrap" aria-label="Information">
+        {ATLAS_MODE_NAV.map(({ id, label, path, icon: Icon }) => (
+          <NavLink
+            key={id}
+            to={path}
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-900/5 hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-500"
+          >
+            <Icon className="h-3.5 w-3.5" />
+            {label}
+          </NavLink>
+        ))}
         {INFO_ITEMS.map(({ kind, label, icon: Icon }) => (
           <button
             key={kind}
