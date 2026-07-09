@@ -155,6 +155,7 @@ export const countries: Record<string, CountryInfo> = {
   PLW: { name: "Palau", flag: "🇵🇼" },
   PNG: { name: "Papua New Guinea", flag: "🇵🇬" },
   POL: { name: "Poland", flag: "🇵🇱" },
+  PRK: { name: "North Korea", flag: "🇰🇵" },
   PRT: { name: "Portugal", flag: "🇵🇹" },
   PRY: { name: "Paraguay", flag: "🇵🇾" },
   PSE: { name: "Palestine", flag: "🇵🇸" },

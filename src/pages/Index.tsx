@@ -64,6 +64,7 @@ const Index = () => {
               selectedIds={selectedAlliances.map((a) => a.id)}
               onToggle={toggleAlliance}
               onShowInfo={setProfileOrg}
+              onReset={() => setSelectedAlliances([])}
             />
           </aside>
 

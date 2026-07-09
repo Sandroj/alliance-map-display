@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BadgeInfo, CircleDollarSign, Landmark, Shield, UsersRound } from 'lucide-react';
+import { BadgeInfo, CircleDollarSign, Landmark, RotateCcw, Shield, UsersRound } from 'lucide-react';
 import { Alliance, AllianceCategory } from '@/data/alliances';
 import { CATEGORY_META, CATEGORY_ORDER } from '@/data/categories';
 import { STRATEGIC_LENSES } from '@/data/strategic-lenses';
@@ -21,6 +21,7 @@ interface AlliancePanelProps {
   selectedIds: string[];
   onToggle: (alliance: Alliance) => void;
   onShowInfo: (alliance: Alliance) => void;
+  onReset: () => void;
 }
 
 const AllianceChip: React.FC<{
@@ -88,6 +89,7 @@ const AlliancePanel: React.FC<AlliancePanelProps> = ({
   selectedIds,
   onToggle,
   onShowInfo,
+  onReset,
 }) => {
   const [collapsed, setCollapsed] = useState<Partial<Record<AllianceCategory, boolean>>>({});
   const visibleCategories = activeCategory ? [activeCategory] : CATEGORY_ORDER;
@@ -105,9 +107,27 @@ const AlliancePanel: React.FC<AlliancePanelProps> = ({
             {activeLensMeta?.description}
           </div>
         </div>
-        <span className="ml-auto rounded bg-gray-950/5 px-2 py-1 text-[11px] font-semibold text-gray-600">
-          {lensAlliances.length} mapped layers
-        </span>
+        <div className="ml-auto flex items-center gap-1.5">
+          <span className="rounded bg-gray-950/5 px-2 py-1 text-[11px] font-semibold text-gray-600">
+            {lensAlliances.length} mapped layers
+          </span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={onReset}
+                disabled={selectedIds.length === 0}
+                aria-label="Clear selected layers"
+                className="grid h-7 w-7 place-items-center rounded-lg border border-gray-200/80 bg-white/72 text-gray-500 transition-colors hover:border-gray-300 hover:bg-white hover:text-gray-950 disabled:cursor-not-allowed disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-gray-500"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs">Clear selected layers</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
       </div>
       <TooltipProvider>
         {visibleCategories.map((category) => {

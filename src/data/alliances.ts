@@ -13,6 +13,7 @@ import { asean } from "./alliances/orgs/asean";
 import { atlanticpact } from "./alliances/orgs/atlanticpact";
 import { aukus } from "./alliances/orgs/aukus";
 import { bimstec } from "./alliances/orgs/bimstec";
+import { bosphorusRoute } from "./alliances/orgs/bosphorusRoute";
 import { bri } from "./alliances/orgs/bri";
 import { brics } from "./alliances/orgs/brics";
 import { caricom } from "./alliances/orgs/caricom";
@@ -49,7 +50,11 @@ import { igad } from "./alliances/orgs/igad";
 import { iomed } from "./alliances/orgs/iomed";
 import { iora } from "./alliances/orgs/iora";
 import { jef } from "./alliances/orgs/jef";
+import { kashmirDispute } from "./alliances/orgs/kashmirDispute";
 import { kimberleyProcess } from "./alliances/orgs/kimberleyProcess";
+import { koreanPeninsula } from "./alliances/orgs/koreanPeninsula";
+import { hormuzChokepoint } from "./alliances/orgs/hormuzChokepoint";
+import { malaccaChokepoint } from "./alliances/orgs/malaccaChokepoint";
 import { msp } from "./alliances/orgs/msp";
 import { mercosur } from "./alliances/orgs/mercosur";
 import { nato } from "./alliances/orgs/nato";
@@ -67,15 +72,21 @@ import { osce } from "./alliances/orgs/osce";
 import { parischarter } from "./alliances/orgs/parischarter";
 import { pesco } from "./alliances/orgs/pesco";
 import { pif } from "./alliances/orgs/pif";
+import { panamaCanalRoute } from "./alliances/orgs/panamaCanalRoute";
 import { quad } from "./alliances/orgs/quad";
 import { rcep } from "./alliances/orgs/rcep";
+import { redSeaGulfAden } from "./alliances/orgs/redSeaGulfAden";
 import { saarc } from "./alliances/orgs/saarc";
 import { sadc } from "./alliances/orgs/sadc";
 import { safe } from "./alliances/orgs/safe";
 import { sco } from "./alliances/orgs/sco";
 import { sica } from "./alliances/orgs/sica";
+import { southChinaSea } from "./alliances/orgs/southChinaSea";
+import { suezCanalRoute } from "./alliances/orgs/suezCanalRoute";
+import { taiwanStrait } from "./alliances/orgs/taiwanStrait";
 import { tiar } from "./alliances/orgs/tiar";
 import { turkicStates } from "./alliances/orgs/turkicStates";
+import { ukraineWarAlignment } from "./alliances/orgs/ukraineWarAlignment";
 import { usmca } from "./alliances/orgs/usmca";
 import { usTreatyAllies } from "./alliances/orgs/usTreatyAllies";
 
@@ -84,11 +95,14 @@ export type { Alliance, AllianceCategory, AllianceMember, MemberStatus } from ".
 export const alliances: Alliance[] = [
   aachen, afcfta, africacorps, africanunion, albaTcp, andeanCommunity,
   antarcticTreaty, apec, arableague, arcticcouncil, asean, atlanticpact, aukus,
-  bimstec, bri, brics, caricom, cdrn, celac, ceps, cofa, comesa, commonwealth,
+  bimstec, bosphorusRoute, bri, brics, caricom, cdrn, celac, ceps, cofa, comesa, commonwealth,
   councilofeurope, cplp, cptpp, csto, eac, epc, eu, eaeu, ecowas, efta,
   fiveeyes, fpda, francophonie, g7, g20, gcc, gecf, ggi, hanseatic, iaea, icc,
-  icepact, iea, igad, iomed, iora, jef, kimberleyProcess, msp, mercosur, nato,
+  icepact, iea, igad, iomed, iora, jef, kashmirDispute, kimberleyProcess,
+  koreanPeninsula, hormuzChokepoint, malaccaChokepoint, msp, mercosur, nato,
   norad, nptNuclearStates, nuclearUmbrella, nuclearWeaponFreeZones, oas, oecd,
-  oecs, oic, opec, opecPlus, osce, parischarter, pesco, pif, quad, rcep, saarc,
-  sadc, safe, sco, sica, tiar, turkicStates, usmca, usTreatyAllies,
+  oecs, oic, opec, opecPlus, osce, panamaCanalRoute, parischarter, pesco, pif,
+  quad, rcep, redSeaGulfAden, saarc, sadc, safe, sco, sica, southChinaSea,
+  suezCanalRoute, taiwanStrait, tiar, turkicStates, ukraineWarAlignment, usmca,
+  usTreatyAllies,
 ].sort((a, b) => a.name.localeCompare(b.name));
